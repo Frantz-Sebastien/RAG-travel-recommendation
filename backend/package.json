@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "resetschema": "psql -U fsmathias -f db/schema.sql"
+    "resetschema": "psql -U fsmathias -f db/schema.sql",
+    "plantseed": "psql -U fsmathias -f db/seed.sql"
   },
   "keywords": [],
   "author": "",

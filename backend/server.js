@@ -15,9 +15,9 @@ app.get('/', (req, res) => {
 
 app.get('/test-db', async (req, res) => {
     try {
-      const result = await cn.query('SELECT NOW()'); // Query the database
+      const result = await cn.one('SELECT NOW()'); // Query the database
       console.log('Query Result:', result); // Log the result to debug
-      res.json({ message: 'Database connected!', timestamp: result[0].now });
+      res.json({ message: 'Database connected!', timestamp: result.now });
     } catch (err) {
       console.error('DB Error Details:', err.message, err.stack); // Add detailed error logging
       res.status(500).json({ error: 'Database connection failed' });
