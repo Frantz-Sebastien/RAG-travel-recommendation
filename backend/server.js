@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const cn = require("./db/dbConfig")
+const OpenAI = require("openai")
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY})
 
 const app = express();
 app.use(express.json());
@@ -47,6 +49,31 @@ app.post('/add-embedding', async (req, res) => {
     } catch (error){
         console.error("Error storing embedding:", error.message)
         res.status(500).json({ error: "Failed to store embedding" })
+    }
+})
+
+app.post("/generate-embedding", async (req, res) => {
+    const { user_id, preference } = req.body
+
+    if(!user_id || !preference){
+        return res.status(400).json({ error: "user_id and preference are required" })
+    }
+
+    try {
+        const response = await openai.embedding.create({
+            model: "text-embedding-ada-002",
+            input: preference,
+        })
+
+        const embedding = response.data[0].embedding;
+
+        //Update the database with the embedding
+        await cn.none("UPDATE users SET embedding = $1 WHERE id = $2", [embedding, user_id])
+
+        res.json({ message: "Embedding generated and stored successfully!"})
+    } catch (error){
+        console.error("Error generating embedding:", error.message)
+        res.status(500).json({ error: "Failed to generate embedding" })
     }
 })
 
