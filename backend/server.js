@@ -1,9 +1,8 @@
-require('dotenv').config({path:"../.env"});
+require('dotenv').config({ path: "../.env" });
 const express = require('express');
 const cors = require('cors');
-const cn = require("./db/dbConfig")
-const OpenAI = require("openai")
-const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY})
+const cn = require("./db/dbConfig");
+const axios = require('axios');
 
 const app = express();
 app.use(express.json());
@@ -11,24 +10,19 @@ app.use(cors());
 
 const PORT = process.env.PORT || 4000;
 
+// ✅ Correct Gemini API URL for embeddings
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_EMBEDDING_URL = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedText?key=${GEMINI_API_KEY}`;
+
+// 🌍 Root route
 app.get('/', (req, res) => {
     res.send('RAG Travel Recommendation Backend is Running 🚀');
 });
 
-// app.get('/test-db', async (req, res) => {
-//     try {
-//       const result = await cn.one('SELECT NOW()'); // Query the database
-//       console.log('Query Result:', result); // Log the result to debug
-//       res.json({ message: 'Database connected!', timestamp: result.now });
-//     } catch (err) {
-//       console.error('DB Error Details:', err.message, err.stack); // Add detailed error logging
-//       res.status(500).json({ error: 'Database connection failed' });
-//     }
-//   });
-
+// 📌 Fetch all users
 app.get('/users', async (req, res) => {
     try {
-        const users = await cn.any('SELECT * FROM users'); // Adjust table name
+        const users = await cn.any('SELECT * FROM users');
         res.json(users);
     } catch (error) {
         console.error("Error fetching users:", error.message);
@@ -36,60 +30,74 @@ app.get('/users', async (req, res) => {
     }
 });
 
+// 📌 Store an embedding manually (if needed)
 app.post('/add-embedding', async (req, res) => {
     const { user_id, embedding } = req.body;
     try {
-        // Ensure embedding is an array and user_id is valid
-        if(!Array.isArray(embedding) || embedding.length !== 1536){
-            throw new Error("Invalid embedding format or size")
+        if (!Array.isArray(embedding)) {
+            throw new Error("Invalid embedding format");
         }
 
-        await cn.none('UPDATE users SET embedding = $1 WHERE id = $2', [embedding, user_id])
-        res.json({message: 'Embedding stored successfully'})
-    } catch (error){
-        console.error("Error storing embedding:", error.message)
-        res.status(500).json({ error: "Failed to store embedding" })
+        await cn.none('UPDATE users SET embedding = $1 WHERE id = $2', [embedding, user_id]);
+        res.json({ message: 'Embedding stored successfully' });
+    } catch (error) {
+        console.error("Error storing embedding:", error.message);
+        res.status(500).json({ error: "Failed to store embedding" });
     }
-})
+});
 
+// 📌 Generate embeddings using Gemini API
 app.post("/generate-embedding", async (req, res) => {
-    const { user_id, preference } = req.body
+    const { user_id } = req.body;
 
-    if(!user_id || !preference){
-        return res.status(400).json({ error: "user_id and preference are required" })
+    if (!user_id) {
+        return res.status(400).json({ error: "user_id is required" });
     }
 
     try {
-        const response = await openai.embedding.create({
-            model: "text-embedding-ada-002",
-            input: preference,
-        })
+        // Step 1: Fetch user's travel preferences
+        const user = await cn.oneOrNone('SELECT preferred_activities FROM users WHERE id = $1', [user_id]);
 
-        const embedding = response.data[0].embedding;
+        if (!user || !user.preferred_activities) {
+            return res.status(404).json({ error: "No travel preferences found for this user" });
+        }
 
-        //Update the database with the embedding
-        await cn.none("UPDATE users SET embedding = $1 WHERE id = $2", [embedding, user_id])
+        // Step 2: Generate embedding using Gemini API
+        const response = await axios.post(GEMINI_EMBEDDING_URL, {
+            content: {
+                parts: [{ text: user.preferred_activities }]
+            }
+        });
 
-        res.json({ message: "Embedding generated and stored successfully!"})
-    } catch (error){
-        console.error("Error generating embedding:", error.message)
-        res.status(500).json({ error: "Failed to generate embedding" })
+        if (!response.data || !response.data.embedding) {
+            throw new Error("Invalid response from Gemini API");
+        }
+
+        const embedding = response.data.embedding;
+
+        // Step 3: Store embedding in the database
+        await cn.none("UPDATE users SET embedding = $1 WHERE id = $2", [embedding, user_id]);
+
+        res.json({ message: "Embedding generated and stored successfully!" });
+    } catch (error) {
+        console.error("Error generating embedding:", error.message);
+        res.status(500).json({ error: "Failed to generate embedding" });
     }
-})
+});
 
+// 📌 Get recommendations based on embedding similarity
 app.get('/recommendations/:user_id', async (req, res) => {
     const { user_id } = req.params;
 
     try {
-        // Fetch the embedding for the given user_id
+        // Step 1: Fetch user's embedding
         const user = await cn.one('SELECT embedding FROM users WHERE id = $1', [user_id]);
 
-        // If no embedding exists, return an error
         if (!user.embedding) {
             return res.status(404).json({ error: "No embedding found for this user" });
         }
 
-        // Find the most similar users based on cosine similarity
+        // Step 2: Find similar users based on cosine similarity
         const recommendations = await cn.any(
             `
             SELECT id, name, email, 
@@ -109,8 +117,7 @@ app.get('/recommendations/:user_id', async (req, res) => {
     }
 });
 
-  
-
+// 🌍 Start the server
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
