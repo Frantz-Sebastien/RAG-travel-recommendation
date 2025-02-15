@@ -1,7 +1,8 @@
-require('dotenv').config({path:"../.env"});
+require('dotenv').config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const db = require("./dbConfig");
 
+// ../../frontend
 const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Function to generate embeddings using Gemini
