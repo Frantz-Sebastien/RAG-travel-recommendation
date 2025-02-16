@@ -1,9 +1,12 @@
 import 'dotenv/config';
+import express from 'express'
 import axios from 'axios';
-import db from './dbConfig.js'; // Import database connection
+import db from '../db/dbConfig.js'; // Import database connection
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent";
+
+const router = express.Router(); // Create Express Router
 
 /**
  * Generates embeddings using Gemini API
@@ -43,5 +46,46 @@ export async function storeEmbedding(userId, text) {
         console.error("Error storing embedding:", error);
     }
 }
+
+// Generate Embeddings for All Users (in Batches)
+router.post("/generate-embeddings-for-all", async (req, res) => {
+    try {
+        const batchSize = 20; // Adjust batch size
+        const users = await db.any("SELECT id FROM users WHERE embedding IS NULL LIMIT $1", [batchSize]);
+
+        if (users.length === 0) {
+            return res.json({ message: "All users already have embeddings!" });
+        }
+
+        for (const user of users) {
+            await storeEmbedding(user.id, `User ${user.id}'s travel preferences`);
+        }
+
+        res.json({ message: `Generated embeddings for ${users.length} users. Run again for the next batch.` });
+    } catch (error) {
+        console.error("Error generating embeddings:", error);
+        res.status(500).json({ error: error.message });
+    }
+})
+
+router.post("/generate-embedding", async (req, res) => {
+    const { userId, text } = req.body;
+
+    if (!userId || !text) {
+        return res.status(400).json({ error: "User ID and text are required" });
+    }
+
+    try {
+        await storeEmbedding(userId, text);
+        res.json({ message: `Embedding generated and stored for user ID: ${userId}` });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+const embeddingRoutes = router; // ✅ Correct export name
+export default embeddingRoutes;
+
+
 
 
