@@ -53,7 +53,7 @@ export async function storeEmbedding(userId, text) {
 // Generate Embeddings for All Users (in Batches)
 router.post("/generate-embeddings-for-all", async (req, res) => {
     try {
-        const batchSize = 20; // Adjust batch size
+        const batchSize = 100; // Adjust batch size
         const users = await db.any("SELECT id FROM users WHERE embedding IS NULL LIMIT $1", [batchSize]);
 
         if (users.length === 0) {
