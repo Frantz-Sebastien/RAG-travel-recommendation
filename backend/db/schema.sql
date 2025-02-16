@@ -29,5 +29,9 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Adding the embedding column to store vectors (1536 is for OpenAI)
-ALTER TABLE users ADD COLUMN embedding vector(1536);
+-- ALTER TABLE users ADD COLUMN embedding vector(1536);
+
+--Updating the embedding column to store vectors (768 for GeminiAI)
+ALTER TABLE users
+    ALTER COLUMN embedding TYPE vector(768);
 

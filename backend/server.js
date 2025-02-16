@@ -123,20 +123,11 @@
 // });
 
 
-// require('dotenv').config();
-// const express = require('express');
-// const cors = require('cors');
-
-// const app = express();
-// app.use(cors());
-// app.use(express.json());
-
-// const PORT = process.env.PORT || 4000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import db from "./db/dbConfig.js"; // Import dbConfig
+import { storeEmbedding } from './db/embeddings.js';
 
 dotenv.config();
 
@@ -146,5 +137,36 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+// Test Database Connection
+app.get("/test-db", async (req, res) => {
+    try {
+      const result = await db.any("SELECT * FROM users");
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  //Generate and Store Embedding for a User
+  app.post("/generate-embedding", async (req, res) => {
+    const { userId, text } = req.body
+
+    if(!userId || !text){
+        return res.status(400).json({ error: "User ID and text are required" })
+    }
+
+    try {
+        await storeEmbedding(userId, text)
+        res.json({ message: `Embedding generated and stored for user ID: ${userId}`})
+    } catch (error){
+        res.status(500).json({ error: error.message })
+    }
+  })
+
+  app.post('/test', (req, res) => {
+    console.log(req.body); // ✅ Now it works!
+    res.json({ message: 'Data received!', data: req.body });
+  });
+  
+  app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
 
