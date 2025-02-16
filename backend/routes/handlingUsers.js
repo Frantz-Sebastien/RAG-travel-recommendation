@@ -13,11 +13,17 @@ router.post("/find-similar-users", async (req, res) => {
 
     try{
         //Retrieve the embedding for the given user
-        const user = await db.one("SELECT embedding FROM users WHERE id = $1", [userId])
+        const user = await db.oneOrNone("SELECT embedding FROM users WHERE id = $1", [userId])
+
+        if(!user){
+            return res.status(404).json({ error: "User not found" })
+        }
 
         if(!user.embedding){
             return res.status(404).json({ error: "User embedding not found" })
         }
+
+        console.log(`🔍 Searching for users similar to user ID: ${userId}`);
 
         // Find the top 5 most similar users (excluding the user themselves)
         const similarUsers = await db.any(

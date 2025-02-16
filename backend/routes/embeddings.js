@@ -37,13 +37,16 @@ export async function generateEmbedding(text) {
  */
 export async function storeEmbedding(userId, text) {
     const embedding = await generateEmbedding(text);
-    if (!embedding) return;
+    if (!embedding){
+        console.error(`❌ Failed to generate embedding for user ${userId}`)
+        return;
+    }
 
     try {
         await db.none("UPDATE users SET embedding = $1 WHERE id = $2", [embedding, userId]);
         console.log(`✅ Embedding stored for user ID: ${userId}`);
     } catch (error) {
-        console.error("Error storing embedding:", error);
+        console.error("❌ Error storing embedding:", error);
     }
 }
 
