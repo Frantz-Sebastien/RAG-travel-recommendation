@@ -23,6 +23,8 @@ backend/
 │── db/
 │   ├── schema.sql  # Database schema
 │   ├── seed.sql  # Initial database seed data
+│   ├── updateDatabase.sql # To update database and track SQL commands from VS Code (optional)
+│   ├── 
 │── routes/
 │   ├── embeddings.js  # Handles embedding generation and storage
 │   ├── generateAllEmbeddings.js  # Automates embeddings for all users
