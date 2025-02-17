@@ -3,3 +3,6 @@ node_modules
 .DS_Store
 dist
 build
+
+mountains_vs_beaches_preferences.csv
+
