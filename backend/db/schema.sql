@@ -10,8 +10,6 @@ CREATE EXTENSION IF NOT EXISTS vector;
 -- Recreate the users table with the correct columns
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    email VARCHAR(100) UNIQUE NOT NULL,
     age INT,
     gender VARCHAR(50),
     income DECIMAL(10, 2),
@@ -25,6 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
     favorite_season VARCHAR(50),
     pets BOOLEAN,
     environmental_concerns BOOLEAN,
+    preference BOOLEAN,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

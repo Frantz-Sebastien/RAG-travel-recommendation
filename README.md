@@ -21,8 +21,6 @@ It utilizes **PostgreSQL with pgvector** to store and compare embeddings, and **
 ```
 backend/
 │── db/
-│   ├── dbConfig.js  # Database configuration (pg-promise)
-│   ├── generateGeminiEmbedding.js  # Generates embeddings using Gemini API
 │   ├── schema.sql  # Database schema
 │   ├── seed.sql  # Initial database seed data
 │── routes/
