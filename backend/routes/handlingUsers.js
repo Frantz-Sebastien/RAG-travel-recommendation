@@ -42,5 +42,84 @@ router.post("/find-similar-users", async (req, res) => {
     }
   })
 
+  router.post("/get-recommendations", async (req, res) => {
+    const { userId } = req.body //Deconstructing req.body (req.body is an object)
+
+    //Checking if the user ID is present
+    if(!userId){
+        return res.status(400).json({ error: "User ID is required" })
+    }
+
+    try{
+        //Step 1: Retrieve the user's embedding
+        const user = await db.oneOrNone("SELECT embedding FROM users WHERE id = $1", [userId])
+
+        //Checking to see if an user exist with the userId provided
+        if(!user){
+            return res.status(404).json({ error: "User not found" })
+        }
+
+        //Checking if the embedding is empty or null for specific user
+        if(!user.embedding){
+            return res.status(404).json({ error: "User embedding not found"})
+        }
+
+        //Step 2: Find similar users based on embeddings
+        const similarUsers = await db.any(
+            `SELECT id, embedding <=> $1 AS similarity
+            FROM users
+            WHERE id != $2
+            ORDER BY similarity ASC
+            LIMIT 5`,
+            [user.embedding, userId]
+        )
+
+        if(similarUsers.length === 0){
+            return res.json({ recommendations: [], message: "No similar users found" })
+        }
+
+        //Step 3: Get travel preferences of similar users
+        const similarUserIds = similarUsers.map(user => user.id) //creating new array of IDs of user with similar taste
+        const preferences = await db.any(
+            `SELECT preferred_activities, vacation_budget, favorite_season
+            FROM users
+            WHERE id IN ($1:csv)`,
+            [similarUserIds.length ? similarUserIds : [-1]]
+        )
+
+        //Step 4: Generate recommendations based on common preferences
+        const activityCounts = {};
+        preferences.forEach(pref => {
+            let activities;
+
+            if(typeof pref.preferred_activities === "string"){
+                //If it's a string, wrap it in an array
+                activities = [pref.preferred_activities]
+            } else if(Array.isArray(pref.preferred_activities)){
+                //If it's already an array, leave it alone, keep it as is (although, I'm not sure that it will ever be an array...🤔)
+                activities = pref.preferred_activities
+            } else{
+                //If it's not a string or an array (like null, undefined, boolean, number, etc...)
+                activities = []
+            }
+
+            activities.forEach(activity => {
+                activityCounts[activity] = (activityCounts[activity] || 0) + 1;
+            });
+        });
+
+
+        //Step 5: Rank recommendations by popularity
+        const rankedActivities = Object.entries(activityCounts)
+            .sort((a,b) => b[1] - a[1])
+            .map(entry => entry[0])
+
+        res.json({ recommendations: rankedActivities.slice(0,5) })
+    }   catch(error){
+            console.error("❌ Error generating recommendations:", error)
+            res.status(500).json({ error: "Internal Server Error" })
+    }
+  })
+
 const handlingUsersRoutes = router; // ✅ Correct export name
 export default handlingUsersRoutes;
