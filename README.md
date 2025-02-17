@@ -96,7 +96,7 @@ _Server should run at `http://localhost:4000`._
 
 ## API Endpoints
 
-### 🎭 Generate Embeddings for a User
+### Generate Embeddings for a User
 **POST** `/embeddings/generate-embedding`
 ```json
 {
@@ -117,7 +117,7 @@ Stores an embedding for the given user.
   "userId": 1
 }
 ```
-🛩️ Returns the **top 5 users** with the most similar embeddings.
+Returns the **top 5 users** with the most similar embeddings.
 
 ### Get Personalized Travel Recommendations
 **POST** `/users/get-recommendations`
