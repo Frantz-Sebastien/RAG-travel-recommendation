@@ -3,6 +3,7 @@ import { useState } from 'react'
 // import viteLogo from '/vite.svg'
 // import './App.css'
 import Home from './pages/Home'
+import UserProfileForm from './components/UserProfileForm'
 
 function App() {
   
@@ -10,6 +11,7 @@ function App() {
   return (
     <>
       <Home />
+      <UserProfileForm />
     </>
   )
 }
