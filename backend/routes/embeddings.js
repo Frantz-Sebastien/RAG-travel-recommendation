@@ -8,10 +8,12 @@ const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/
 
 const router = express.Router(); // Create Express Router
 
+
 /**
  * Generates embeddings using Gemini API
  * @param {string} text - Input text to convert into embeddings
  * @returns {Promise<Array>} - Embedding vector
+ * However... I don't know how I will make this work for my website yet... but I'm leaving it because it can be a great feature, I just need to know how to implement it for the frontend.
  */
 export async function generateEmbedding(text) {
     try {
@@ -50,6 +52,22 @@ export async function storeEmbedding(userId, text) {
     }
 }
 
+
+router.post("/generate-embedding", async (req, res) => {
+    const { userId, text } = req.body;
+    
+    if (!userId || !text) {
+        return res.status(400).json({ error: "User ID and text are required" });
+    }
+    
+    try {
+        await storeEmbedding(userId, text);
+        res.json({ message: `Embedding generated and stored for user ID: ${userId}` });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Generate Embeddings for All Users (in Batches)
 router.post("/generate-embeddings-for-all", async (req, res) => {
     try {
@@ -70,21 +88,6 @@ router.post("/generate-embeddings-for-all", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 })
-
-router.post("/generate-embedding", async (req, res) => {
-    const { userId, text } = req.body;
-
-    if (!userId || !text) {
-        return res.status(400).json({ error: "User ID and text are required" });
-    }
-
-    try {
-        await storeEmbedding(userId, text);
-        res.json({ message: `Embedding generated and stored for user ID: ${userId}` });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
 
 const embeddingRoutes = router; // ✅ Correct export name
 export default embeddingRoutes;

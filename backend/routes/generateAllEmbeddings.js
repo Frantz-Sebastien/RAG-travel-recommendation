@@ -4,6 +4,8 @@ dotenv.config()
 const PORT = process.env.PORT || 4000
 const API_URL = `http://localhost:${PORT}/embeddings/generate-embeddings-for-all`
 
+//This function was created to automate the process of adding embeddings to every single users in the database. When the backend is working, this function should be used at least once and afterwards, sparingly.
+
 async function generateAllEmbeddings() {
     let keepGoing = true;
 
