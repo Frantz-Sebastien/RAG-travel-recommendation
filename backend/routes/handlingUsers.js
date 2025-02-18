@@ -3,6 +3,43 @@ import db from '../db/dbConfig.js'; // Adjust the path if needed
 
 const router = express.Router();
 
+//Creating new user
+router.post("/create", async (req, res) => {
+    console.log("Incoming Request Data:", req.body); // 👈 Add this for debugging
+    const {
+        age, gender, income, education_level, travel_frequency,
+        preferred_activities, vacation_budget, location,
+        proximity_to_mountains, proximity_to_beaches,
+        favorite_season, pets, environmental_concerns, preference
+    } = req.body;
+
+    if (!age || !gender || !income || !education_level || !travel_frequency ||
+        !preferred_activities || !vacation_budget || !location || !favorite_season) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+        const result = await db.one(
+            `INSERT INTO users (age, gender, income, education_level, travel_frequency, preferred_activities, 
+                               vacation_budget, location, proximity_to_mountains, proximity_to_beaches, 
+                               favorite_season, pets, environmental_concerns, preference)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+             RETURNING id`,
+            [
+                age, gender, income, education_level, travel_frequency, preferred_activities,
+                vacation_budget, location, proximity_to_mountains, proximity_to_beaches,
+                favorite_season, pets, environmental_concerns, preference
+            ]
+        );
+
+        res.status(201).json({ message: "User profile created", userId: result.id });
+    } catch (error) {
+        console.error("❌ Error creating user profile:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
 // 🔍 Find Similar Users
 router.post("/find-similar-users", async (req, res) => {
     const { userId } = req.body;

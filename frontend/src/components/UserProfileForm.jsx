@@ -8,7 +8,7 @@ const UserProfileForm = () => {
         income: "", //Int
         education_level: "", //String Select
         travel_frequency:"", //Int
-        preferred_activity:"", //String Select
+        preferred_activities:"", //String Select
         vacation_budget:"", //Int
         location:"", //String Select
         proximity_to_mountains:"", //Int Random number generated
@@ -24,7 +24,7 @@ const UserProfileForm = () => {
         setFormData({...formData, [event.target.name]: event.target.value})
     }
 
-    const handleFormSubmit = (event) => {
+    const handleFormSubmit = async (event) => {
         event.preventDefault()
         const fullFormData = {
             ...formData,
@@ -34,19 +34,40 @@ const UserProfileForm = () => {
             proximity_to_mountains: Math.floor(Math.random() * 300), //random number between 0 and 300. for testing purposes only
             proximity_to_beaches: Math.floor(Math.random() * 300), //random number between 0 and 300. for testing purposes only
         }
-        console.log(fullFormData) //for visual purpose only
+        console.log("Submitting:", fullFormData) //for debugging purpose
+
+        try{
+            const response = await axios.post("http://localhost:4000/users/create", fullFormData)
+            const userId = response.data.userId
+            alert(`✅ Profile successfully created! User ID: ${userId}`);
+
+            //Send text input to generate embedding
+            if(formData.text){
+                await axios.post("http://localhost:4000/embeddings/generate-embedding",{
+                    userId,
+                    text: formData.text
+                })
+                alert("✅ Embedding successfully generated!");
+            }
+        } catch(error){
+            console.error("❌ Error submitting form:", error)
+            alert("❌ Failed to submit form. Please try again.")
+        }
     }
 
   return (
     <form onSubmit={handleFormSubmit}>
         <input type="number" name="age" placeholder="Age" onChange={handleFormChange}/>
+
         <select name="gender" onChange={handleFormChange}>
             <option value="">Select Gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="non-binary">Non-Binary</option>
         </select>
+
         <input type="number" name="income" placeholder='Income' onChange={handleFormChange}/>
+
         <select name="education_level" onChange={handleFormChange}>
             <option value="">Select Education Level</option>
             <option value="high school">High School</option>
@@ -54,21 +75,26 @@ const UserProfileForm = () => {
             <option value="master">Master</option>
             <option value="doctorate">Doctorate</option>
         </select>
+
         <input type="number" name="travel_frequency" placeholder='Travel Frequency' onChange={handleFormChange}/>
-        <select name="preferred_activity" onChange={handleFormChange}>
+
+        <select name="preferred_activities" onChange={handleFormChange}>
             <option value="">Select Preferred Activity</option>
             <option value="skiing">Skiing</option>
             <option value="swimming">Swimming</option>
             <option value="hiking">Hiking</option>
             <option value="sunbathing">Sunbathing</option>
         </select>
+
         <input type="number" name="vacation_budget" placeholder='Vacation Budget' onChange={handleFormChange}/>
+
         <select name="location" onChange={handleFormChange}>
             <option value="">Select Location Type</option>
             <option value="urban">Urban</option>
             <option value="suburban">Suburban</option>
             <option value="rural">Rural</option>
         </select>
+
         <select name="favorite_season" onChange={handleFormChange}>
             <option value="">Select Favorite Season</option>
             <option value="winter">Winter</option>
@@ -76,23 +102,32 @@ const UserProfileForm = () => {
             <option value="summer">Summer</option>
             <option value="fall">Fall</option>
         </select>
+
         <select name="pets" onChange={handleFormChange}>
             <option value="">Do you own Pets?</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
         </select>
+
         <select name="environmental_concerns" onChange={handleFormChange}>
             <option value="">Do you have Environmental Concerns?</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
         </select>
+
         <select name="preference" onChange={handleFormChange}>
             <option value="">Do you have a Preference?</option>
             <option value="yes">Mountains</option>
             <option value="no">Beaches</option>
         </select>
 
-
+        <textarea
+            name="text"
+            placeholder='Describe your ideal travel experience...'
+            onChange={handleFormChange}
+            rows="4"
+            cols="50" 
+        />
 
         <button type="submit">Submit</button>
     </form>
