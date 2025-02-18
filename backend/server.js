@@ -3,8 +3,16 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import handlingUsersRoutes from './routes/handlingUsers.js';
 import embeddingRoutes from './routes/embeddings.js';
-import db from './db/dbConfig.js'
-dotenv.config();
+import db from './db/dbConfig.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+//Ensure dotenv loads from the correct path
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, ".env") });
+
+console.log("✅ .env Loaded Successfully");
 
 const app = express();
 app.use(cors());

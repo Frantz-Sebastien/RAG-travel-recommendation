@@ -1,4 +1,4 @@
-import 'dotenv/config';
+
 import express from 'express'
 import axios from 'axios';
 import db from '../db/dbConfig.js'; // Import database connection
