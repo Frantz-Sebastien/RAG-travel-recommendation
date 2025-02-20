@@ -142,7 +142,7 @@ router.post("/find-similar-users", async (req, res) => {
         //Step 3: Get travel preferences of similar users
         const similarUserIds = similarUsers.map(user => user.id) //creating new array of IDs of user with similar taste
         const preferences = await db.any(
-            `SELECT preferred_activities, vacation_budget, favorite_season
+            `SELECT preferred_activities, vacation_budget, favorite_season, income, age, gender, location
             FROM users
             WHERE id IN ($1:csv)`,
             [similarUserIds.length ? similarUserIds : [-1]]
