@@ -1,9 +1,13 @@
-import React from 'react'
-
 const Home = () => {
-  return (
-    <h1>Welcome to the Travel Recommender</h1>
-  )
-}
-
-export default Home
+    return (
+      <div>
+        <h1>Welcome to the Travel Recommender</h1>
+        <p>Discover personalized travel recommendations based on your preferences.</p>
+        <a href="/profile">Go to Profile</a>
+        <a href="/testing">Testing FrontEnd-BackEnd connection</a>
+      </div>
+    );
+  };
+  
+  export default Home;
+  

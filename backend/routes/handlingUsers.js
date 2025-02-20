@@ -2,6 +2,28 @@ import express from 'express';
 import db from '../db/dbConfig.js'; // Adjust the path if needed
 
 const router = express.Router();
+router.use(express.json()); // ✅ Ensure body parsing
+
+//Small Test
+router.get("/ping", (req, res) => {
+    console.log("📌 Received request at /users/ping");
+    res.json({ message: "✅ Backend is working!" });
+});
+
+//Testing Response-Request flow
+router.post("/echo", (req, res) => {
+    console.log("📌 Received request at /users/echo with data:", req.body);
+    
+    const { message } = req.body;
+    
+    if (!message) {
+        return res.status(400).json({ error: "Message is required!" });
+    }
+
+    res.json({ response: `You sent: ${message}` });
+});
+
+
 
 //Creating new user
 router.post("/create", async (req, res) => {
@@ -80,6 +102,8 @@ router.post("/find-similar-users", async (req, res) => {
   })
 
   router.post("/get-recommendations", async (req, res) => {
+    console.log("📌 Received request at /get-recommendations"); //UPDATE
+    console.log("Request body:", req.body); //UPDATE
     const { userId } = req.body //Deconstructing req.body (req.body is an object)
 
     //Checking if the user ID is present
@@ -98,7 +122,7 @@ router.post("/find-similar-users", async (req, res) => {
 
         //Checking if the embedding is empty or null for specific user
         if(!user.embedding){
-            return res.status(404).json({ error: "User embedding not found"})
+            return res.status(404).json({ error: "User embedding not found bro!"})
         }
 
         //Step 2: Find similar users based on embeddings
@@ -159,4 +183,11 @@ router.post("/find-similar-users", async (req, res) => {
   })
 
 const handlingUsersRoutes = router; // ✅ Correct export name
+
+console.log("✅ handlingUsers.js - Loaded Routes:", router.stack.map(r => r.route?.path).filter(Boolean));
+
 export default handlingUsersRoutes;
+
+
+
+

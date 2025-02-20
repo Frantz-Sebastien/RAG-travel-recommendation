@@ -1,3 +1,6 @@
+console.log("✅ embeddings.js is loaded!");
+
+
 import axios from "axios";
 
 import dotenv from "dotenv";

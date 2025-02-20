@@ -6,6 +6,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent";
 
 const router = express.Router(); // Create Express Router
+router.use(express.json()); // ✅ Ensure body parsing
 
 
 /**
@@ -54,6 +55,7 @@ export async function storeEmbedding(userId, text) {
 
 router.post("/generate-embedding", async (req, res) => {
     const { userId, text } = req.body;
+    console.log("Incoming Embedding Data:", req.body); // 👈 Add this for debugging
     
     if (!userId || !text) {
         return res.status(400).json({ error: "User ID and text are required" });

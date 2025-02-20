@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import axios from "axios"
 
-const UserProfileForm = () => {
+//UPDATED line 5
+const UserProfileForm = ({ setUserId, onEmbeddingGenerated }) => {
     const [formData, setFormData] = useState({
         age: "", //Int
         gender: "", //String Select
@@ -34,13 +35,18 @@ const UserProfileForm = () => {
             proximity_to_mountains: Math.floor(Math.random() * 300), //random number between 0 and 300. for testing purposes only
             proximity_to_beaches: Math.floor(Math.random() * 300), //random number between 0 and 300. for testing purposes only
         }
-        console.log("Submitting:", fullFormData) //for debugging purpose
+        console.log("Submitted:", fullFormData) //for debugging purpose
 
         try{
             const response = await axios.post("http://localhost:4000/users/create", fullFormData)
             const userId = response.data.userId
+            console.log(`This is the id that SQL created for us: ${userId}`)
+            setUserId(userId) //added this line also, UPDATED
+
             alert(`✅ Profile successfully created! User ID: ${userId}`);
 
+            await onEmbeddingGenerated(userId)
+            
             //Send text input to generate embedding
             if(formData.text){
                 await axios.post("http://localhost:4000/embeddings/generate-embedding",{
