@@ -1,5 +1,10 @@
 import express from 'express';
 import db from '../db/dbConfig.js'; // Adjust the path if needed
+import { GoogleGenerativeAI } from "@google/generative-ai"
+
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 
 const router = express.Router();
 router.use(express.json()); // ✅ Ensure body parsing
@@ -100,87 +105,139 @@ router.post("/find-similar-users", async (req, res) => {
         res.status(500).json({ error: error.message })
     }
   })
-
+  
   router.post("/get-recommendations", async (req, res) => {
-    console.log("📌 Received request at /get-recommendations"); //UPDATE
-    console.log("Request body:", req.body); //UPDATE
-    const { userId } = req.body //Deconstructing req.body (req.body is an object)
-
-    //Checking if the user ID is present
-    if(!userId){
-        return res.status(400).json({ error: "User ID is required" })
-    }
-
-    try{
-        //Step 1: Retrieve the user's embedding
-        const user = await db.oneOrNone("SELECT embedding FROM users WHERE id = $1", [userId])
-
-        //Checking to see if an user exist with the userId provided
-        if(!user){
-            return res.status(404).json({ error: "User not found" })
-        }
-
-        //Checking if the embedding is empty or null for specific user
-        if(!user.embedding){
-            return res.status(404).json({ error: "User embedding not found bro!"})
-        }
-
-        //Step 2: Find similar users based on embeddings
-        const similarUsers = await db.any(
-            `SELECT id, embedding <=> $1 AS similarity
-            FROM users
-            WHERE id != $2
-            ORDER BY similarity ASC
-            LIMIT 5`,
-            [user.embedding, userId]
-        )
-
-        if(similarUsers.length === 0){
-            return res.json({ recommendations: [], message: "No similar users found" })
-        }
-
-        //Step 3: Get travel preferences of similar users
-        const similarUserIds = similarUsers.map(user => user.id) //creating new array of IDs of user with similar taste
-        const preferences = await db.any(
-            `SELECT preferred_activities, vacation_budget, favorite_season, income, age, gender, location
-            FROM users
-            WHERE id IN ($1:csv)`,
-            [similarUserIds.length ? similarUserIds : [-1]]
-        )
-
-        //Step 4: Generate recommendations based on common preferences
-        const activityCounts = {};
-        preferences.forEach(pref => {
-            let activities;
-
-            if(typeof pref.preferred_activities === "string"){
-                //If it's a string, wrap it in an array
-                activities = [pref.preferred_activities]
-            } else if(Array.isArray(pref.preferred_activities)){
-                //If it's already an array, leave it alone, keep it as is (although, I'm not sure that it will ever be an array...🤔)
-                activities = pref.preferred_activities
-            } else{
-                //If it's not a string or an array (like null, undefined, boolean, number, etc...)
-                activities = []
-            }
-
-            activities.forEach(activity => {
-                activityCounts[activity] = (activityCounts[activity] || 0) + 1;
-            });
-        });
-
-
-        //Step 5: Rank recommendations by popularity
-        const rankedActivities = Object.entries(activityCounts)
-            .sort((a,b) => b[1] - a[1])
-            .map(entry => entry[0])
-
-        res.json({ recommendations: rankedActivities.slice(0,5) })
-    }   catch(error){
-            console.error("❌ Error generating recommendations:", error)
-            res.status(500).json({ error: "Internal Server Error" })
-    }
-  })
+      console.log("📌 Received request at /get-recommendations"); //UPDATE
+      console.log("Request body:", req.body); //UPDATE
+      const { userId } = req.body; //Deconstructing req.body (req.body is an object)
+  
+      //Checking if the user ID is present
+      if (!userId || isNaN(userId)) {
+          return res.status(400).json({ error: "User ID is required" });
+      }
+  
+      try {
+          //Step 1: Retrieve the user's embedding
+          const user = await db.oneOrNone("SELECT embedding FROM users WHERE id = $1", [userId]);
+  
+          //Checking to see if an user exist with the userId provided
+          if (!user) {
+              return res.status(404).json({ error: "User not found" });
+          }
+  
+          //Checking if the embedding is empty or null for specific user
+          if (!user.embedding) {
+              return res.status(404).json({ error: "User embedding not found bro!" });
+          }
+  
+          //Step 2: Find similar users based on embeddings
+          const similarUsers = await db.any(
+              `SELECT id, embedding <=> $1 AS similarity
+              FROM users
+              WHERE id != $2
+              ORDER BY similarity ASC
+              LIMIT 5`,
+              [user.embedding, userId]
+          );
+  
+          if (similarUsers.length === 0) {
+              return res.json({ recommendations: [], message: "No similar users found" });
+          }
+  
+          //Step 3: Get travel preferences of similar users
+          const similarUserIds = similarUsers.map(user => user.id); //creating new array of IDs of user with similar taste
+          const preferences = await db.any(
+              `SELECT preferred_activities, vacation_budget, favorite_season, income, age, gender, location
+              FROM users
+              WHERE id IN ($1:csv)`,
+              [similarUserIds.length ? similarUserIds : [-1]]
+          );
+  
+          //Step 4: Generate recommendations based on common preferences
+          const activityCounts = {};
+  
+          // Updated lists to store user attributes
+          const budgetList = [];
+          const seasonList = [];
+          const locationList = [];
+          const incomeList = [];
+          const ageList = [];
+          const genderList = [];
+  
+          preferences.forEach(pref => {
+              let activities;
+  
+              if (typeof pref.preferred_activities === "string") {
+                  try {
+                      //If it's a string, attempt to parse it as JSON
+                      activities = JSON.parse(pref.preferred_activities);
+                      if (!Array.isArray(activities)) activities = [activities];
+                  } catch (error) {
+                      activities = []; //If parsing fails, default to an empty array
+                  }
+              } else if (Array.isArray(pref.preferred_activities)) {
+                  //If it's already an array, leave it alone, keep it as is (although, I'm not sure that it will ever be an array...🤔)
+                  activities = pref.preferred_activities;
+              } else {
+                  //If it's not a string or an array (like null, undefined, boolean, number, etc...)
+                  activities = [];
+              }
+  
+              activities.forEach(activity => {
+                  activityCounts[activity] = (activityCounts[activity] || 0) + 1;
+              });
+  
+              //Store other relevant preferences like vacation_budget, favorite_season, income, age, gender, location
+              budgetList.push(pref.vacation_budget);
+              seasonList.push(pref.favorite_season);
+              locationList.push(pref.location);
+              ageList.push(pref.age);
+              genderList.push(pref.gender);
+              incomeList.push(pref.income);
+          });
+  
+          //Helper function to count occurrences of elements in an array
+          const countOccurrences = (arr) => {
+              return arr.reduce((acc, val) => {
+                  acc[val] = (acc[val] || 0) + 1;
+                  return acc;
+              }, {});
+          };
+  
+          //Helper function to find the most common in an array
+          const mostCommon = (arr) => {
+              const counts = countOccurrences(arr);
+              return Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0]; //Sort in descending order and return the top item
+          };
+  
+          // Finding the most common preference values
+          const topActivity = mostCommon(Object.entries(activityCounts).map(([key]) => key)); // ✅ Fixed activity selection
+          const topBudget = mostCommon(budgetList);
+          const topSeason = mostCommon(seasonList);
+          const topLocation = mostCommon(locationList);
+          const topIncome = mostCommon(incomeList);
+          const topAge = mostCommon(ageList);
+          const topGender = mostCommon(genderList);
+  
+          //Step 5: Generate AI response using Gemini API
+          const model = genAI.getGenerativeModel({ model: "gemini-pro" }); // ✅ Removed extra space in model name
+  
+          const prompt = `A user is looking for a travel recommendation. Based on similar users, they enjoy activities like ${topActivity}.
+              They prefer traveling in ${topSeason}, with a budget around ${topBudget}. Their ideal location is similar to ${topLocation}. They have an average income of ${topIncome}. They are around ${topAge} years old. And they usually identify as ${topGender}.
+              Provide a well-crafted travel recommendation that feels personal and AI-generated.
+          `;
+  
+          const result = await model.generateContent(prompt);
+          const aiResponse = await result.response.text(); // ✅ Ensuring proper response handling
+  
+          res.json({ recommendations: aiResponse });
+  
+      } catch (error) {
+          console.error("❌ Error generating recommendations:", error);
+          res.status(500).json({ error: "Internal Server Error" });
+      }
+  });
+  
 
 const handlingUsersRoutes = router; // ✅ Correct export name
 
