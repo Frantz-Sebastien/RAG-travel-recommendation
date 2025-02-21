@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import ReactMarkdown from "react-markdown" //Import Markdown renderer
 
 const Recommendations = ({ userId, text }) => {
     const [recommendations, setRecommendations] = useState([]);
@@ -44,7 +45,7 @@ const Recommendations = ({ userId, text }) => {
                 Array.isArray(recommendations) ? (
                     recommendations.map((rec, index) => <p key={index}>{rec}</p>)
                 ) : (
-                    <p>{recommendations}</p> // Directly render the AI-generated text
+                    <ReactMarkdown>{recommendations}</ReactMarkdown> // Directly render the AI-generated text
                 )
             )}
         </div>

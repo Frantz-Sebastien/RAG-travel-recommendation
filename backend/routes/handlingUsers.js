@@ -222,9 +222,28 @@ router.post("/find-similar-users", async (req, res) => {
           //Step 5: Generate AI response using Gemini API
           const model = genAI.getGenerativeModel({ model: "gemini-pro" }); // ✅ Removed extra space in model name
   
-          const prompt = `A user is looking for a travel recommendation. Based on similar users, they enjoy activities like ${topActivity}.
-              They prefer traveling in ${topSeason}, with a budget around ${topBudget}. They currently live in a location that is considered ${topLocation}. They have an average income of ${topIncome}. They are around ${topAge} years old. And they identify as ${topGender}.
-              Read this input they provided: ${text}. Now provide a well-crafted travel recommendation that feels personal for them and take into consideration their input.
+          const prompt = `
+          A user is looking for a personalized travel recommendation. Here's some information about them:
+
+          -Favorite Activities: ${topActivity}
+          -Preferred Travel Season: ${topSeason}
+          -Vacation Budget: ${topBudget}
+          -Current Location: ${topLocation}
+          -Average Income: ${topIncome}
+          -Age Group: ${topAge}
+          -Gender Identity: ${topGender}
+
+          --User's Own Input: ${text}
+
+          ###Generate Their Perfect Trip:
+          Considering all this information, provide a **detailed and engaging** travel recommendation.
+          - Suggest a **specific destination** that aligns with their preferences.
+          - Describe **why** this destination suits them (activity, climate, budget-friendly spots)
+          - Recommend **at least 3 key experiences** they should try.
+          - If budget is low, suggest **affordable travel options**.
+          - If they enjoy socializing, suggest **group-friendly** ideas. If they are lone traveler, suggest **solo-travel-friendly** ideas.
+
+          Make the response sound **friendly, engaging, and expert-like.** The recommendation should feel like it was a carefully thought out **just for them**.
           `;
   
           const result = await model.generateContent(prompt);
