@@ -8,6 +8,7 @@ import axios from "axios";
 const Profile = () => {
     const [userId, setUserId] = useState(null);
     const [embeddingGenerated, setEmbeddingGenerated] = useState(false) //UPDATE
+    const [text, setText] = useState("")
 
     const handleUserCreated = async (newUserId) => {
         console.log("🚀 handleUserCreated was called with newUserId:", newUserId); // ✅ Debugging log
@@ -34,8 +35,8 @@ const Profile = () => {
     return (
         <div>
             <h1>User Profile</h1>
-            <UserProfileForm setUserId={setUserId} onEmbeddingGenerated={handleUserCreated}/>
-            {userId && embeddingGenerated ?  <Recommendations userId={userId} /> : <p>Submit the form to get recommendations.</p>} 
+            <UserProfileForm setUserId={setUserId} onEmbeddingGenerated={handleUserCreated} setText={setText}/>
+            {userId && embeddingGenerated ?  <Recommendations userId={userId} text={text} /> : <p>Submit the form to get recommendations.</p>} 
         </div>
     );
 };

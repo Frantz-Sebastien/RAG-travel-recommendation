@@ -109,7 +109,7 @@ router.post("/find-similar-users", async (req, res) => {
   router.post("/get-recommendations", async (req, res) => {
       console.log("📌 Received request at /get-recommendations"); //UPDATE
       console.log("Request body:", req.body); //UPDATE
-      const { userId } = req.body; //Deconstructing req.body (req.body is an object)
+      const { userId, text } = req.body; //Deconstructing req.body (req.body is an object)
   
       //Checking if the user ID is present
       if (!userId || isNaN(userId)) {
@@ -223,8 +223,8 @@ router.post("/find-similar-users", async (req, res) => {
           const model = genAI.getGenerativeModel({ model: "gemini-pro" }); // ✅ Removed extra space in model name
   
           const prompt = `A user is looking for a travel recommendation. Based on similar users, they enjoy activities like ${topActivity}.
-              They prefer traveling in ${topSeason}, with a budget around ${topBudget}. Their ideal location is similar to ${topLocation}. They have an average income of ${topIncome}. They are around ${topAge} years old. And they usually identify as ${topGender}.
-              Provide a well-crafted travel recommendation that feels personal and AI-generated.
+              They prefer traveling in ${topSeason}, with a budget around ${topBudget}. They currently live in a location that is considered ${topLocation}. They have an average income of ${topIncome}. They are around ${topAge} years old. And they identify as ${topGender}.
+              Read this input they provided: ${text}. Now provide a well-crafted travel recommendation that feels personal for them and take into consideration their input.
           `;
   
           const result = await model.generateContent(prompt);

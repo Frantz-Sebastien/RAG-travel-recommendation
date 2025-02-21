@@ -2,7 +2,7 @@ import { useState } from 'react'
 import axios from "axios"
 
 //UPDATED line 5
-const UserProfileForm = ({ setUserId, onEmbeddingGenerated }) => {
+const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
     const [formData, setFormData] = useState({
         age: "", //Int
         gender: "", //String Select
@@ -36,6 +36,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated }) => {
             proximity_to_beaches: Math.floor(Math.random() * 300), //random number between 0 and 300. for testing purposes only
         }
         console.log("Submitted:", fullFormData) //for debugging purpose
+        setText(fullFormData.text)
 
         try{
             const response = await axios.post("http://localhost:4000/users/create", fullFormData)

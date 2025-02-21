@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const Recommendations = ({ userId }) => {
+const Recommendations = ({ userId, text }) => {
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -20,7 +20,7 @@ const Recommendations = ({ userId }) => {
             }
             console.log(`🔍 Fetching recommendations for user ID: ${userId}`); //UPDATE from line 10 to line 14
             try {
-                const response = await axios.post("http://localhost:4000/users/get-recommendations", { userId, "Content-Type": "application/json" });
+                const response = await axios.post("http://localhost:4000/users/get-recommendations", { userId, text });
                 console.log("📌 Recommendations received:", response.data.recommendations); //UPDATE on this line
                 setRecommendations(response.data.recommendations);
             } catch (error) {
