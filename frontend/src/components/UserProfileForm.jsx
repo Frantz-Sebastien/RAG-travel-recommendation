@@ -85,13 +85,36 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
 
         <input type="number" name="travel_frequency" placeholder='Travel Frequency' onChange={handleFormChange}/>
 
-        <select name="preferred_activities" onChange={handleFormChange}>
+        {/* <select name="preferred_activities" onChange={handleFormChange}>
             <option value="">Select Preferred Activity</option>
             <option value="skiing">Skiing</option>
             <option value="swimming">Swimming</option>
             <option value="hiking">Hiking</option>
             <option value="sunbathing">Sunbathing</option>
-        </select>
+        </select> */}
+
+<div>
+  <label>Select Preferred Activity</label>
+  <div>
+    {["Sunbathing", "Hiking", "Swimming", "Skiing"].map((activity) => {
+      const lowerCaseActivity = activity.toLowerCase(); // Convert to lowercase for backend
+      return (
+        <label key={lowerCaseActivity}>
+          <input
+            type="radio"
+            name="preferred_activities"
+            value={lowerCaseActivity}
+            checked={formData.preferred_activities === lowerCaseActivity}
+            onChange={handleFormChange}
+          />
+          {activity} {/* Display label in original case */}
+        </label>
+      );
+    })}
+  </div>
+</div>
+
+
 
         <input type="number" name="vacation_budget" placeholder='Vacation Budget' onChange={handleFormChange}/>
 
@@ -122,11 +145,33 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
             <option value="no">No</option>
         </select>
 
-        <select name="preference" onChange={handleFormChange}>
-            <option value="">Do you have a Preference?</option>
-            <option value="yes">Mountains</option>
-            <option value="no">Beaches</option>
-        </select>
+        <div>
+            <label>Do you have a preference?</label>
+                <div>
+                    <label>
+                        <input
+                            type="radio"
+                            name="preference"
+                            value="mountains"
+                            checked={formData.preference === "mountains"}
+                            onChange={handleFormChange}
+                        />
+                    Mountains
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="preference"
+                            value="beaches"
+                            checked={formData.preference === "beaches"}
+                            onChange={handleFormChange}
+                        />
+                    Beaches
+                    </label>
+            </div>
+        </div>
+
 
         <textarea
             name="text"
