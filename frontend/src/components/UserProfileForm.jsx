@@ -21,6 +21,10 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
 
     })
 
+    const [visible, setVisible] = useState(true)
+
+    const minimizeForm = () => {setVisible(!visible)}
+
     const handleFormChange = (event) => {
         setFormData({...formData, [event.target.name]: event.target.value})
     }
@@ -37,16 +41,18 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
         }
         console.log("Submitted:", fullFormData) //for debugging purpose
         setText(fullFormData.text)
-
+        
         try{
             const response = await axios.post("http://localhost:4000/users/create", fullFormData)
             const userId = response.data.userId
             console.log(`This is the id that SQL created for us: ${userId}`)
             setUserId(userId) //added this line also, UPDATED
-
+            
             alert(`✅ Profile successfully created! User ID: ${userId}`);
-
+            
             await onEmbeddingGenerated(userId)
+            
+            setVisible(false)
             
             //Send text input to generate embedding
             if(formData.text){
@@ -64,227 +70,234 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
 
   return (
     <div className="container py-4">
-    <div className="row justify-content-center">
-        <div className="col-md-8">
-            <div className="card shadow">
-                <div className="card-header bg-primary text-white">
-                    <h3 className="mb-0">Travel Profile</h3>
-                </div>
-                <div className="card-body">
-                    <form onSubmit={handleFormSubmit}>
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Age</label>
-                                <input 
-                                    type="number" 
-                                    className="form-control" 
-                                    name="age" 
-                                    placeholder="Enter your age" 
-                                    onChange={handleFormChange}
-                                />
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Gender</label>
-                                <select 
-                                    className="form-select" 
-                                    name="gender" 
-                                    onChange={handleFormChange}
-                                >
-                                    <option value="">Select Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="non-binary">Non-Binary</option>
-                                </select>
-                            </div>
-                        </div>
 
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Annual Income</label>
-                                <input 
-                                    type="number" 
-                                    className="form-control" 
-                                    name="income" 
-                                    placeholder="Enter your income" 
-                                    onChange={handleFormChange}
-                                />
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Education Level</label>
-                                <select 
-                                    className="form-select" 
-                                    name="education_level" 
-                                    onChange={handleFormChange}
-                                >
-                                    <option value="">Select Education Level</option>
-                                    <option value="high school">High School</option>
-                                    <option value="bachelor">Bachelor</option>
-                                    <option value="master">Master</option>
-                                    <option value="doctorate">Doctorate</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Travel Frequency (trips per year)</label>
-                                <input 
-                                    type="number" 
-                                    className="form-control" 
-                                    name="travel_frequency" 
-                                    placeholder="Number of trips per year" 
-                                    onChange={handleFormChange}
-                                />
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Vacation Budget</label>
-                                <input 
-                                    type="number" 
-                                    className="form-control" 
-                                    name="vacation_budget" 
-                                    placeholder="Enter your budget" 
-                                    onChange={handleFormChange}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="form-label">Preferred Activities</label>
-                            <div className="d-flex gap-3">
-                                {["Sunbathing", "Hiking", "Swimming", "Skiing"].map((activity) => {
-                                    const lowerCaseActivity = activity.toLowerCase();
-                                    return (
-                                        <div className="form-check" key={lowerCaseActivity}>
-                                            <input
-                                                className="form-check-input"
-                                                type="radio"
-                                                name="preferred_activities"
-                                                value={lowerCaseActivity}
-                                                checked={formData.preferred_activities === lowerCaseActivity}
-                                                onChange={handleFormChange}
-                                                id={`activity-${lowerCaseActivity}`}
-                                            />
-                                            <label className="form-check-label" htmlFor={`activity-${lowerCaseActivity}`}>
-                                                {activity}
-                                            </label>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Current Location</label>
-                                <select 
-                                    className="form-select" 
-                                    name="location" 
-                                    onChange={handleFormChange}
-                                >
-                                    <option value="">Select Location Type</option>
-                                    <option value="urban">Urban</option>
-                                    <option value="suburban">Suburban</option>
-                                    <option value="rural">Rural</option>
-                                </select>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Favorite Season</label>
-                                <select 
-                                    className="form-select" 
-                                    name="favorite_season" 
-                                    onChange={handleFormChange}
-                                >
-                                    <option value="">Select Favorite Season</option>
-                                    <option value="winter">Winter</option>
-                                    <option value="spring">Spring</option>
-                                    <option value="summer">Summer</option>
-                                    <option value="fall">Fall</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Do you have pets?</label>
-                                <select 
-                                    className="form-select" 
-                                    name="pets" 
-                                    onChange={handleFormChange}
-                                >
-                                    <option value="">Select an option</option>
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
-                                </select>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Environmental Concerns?</label>
-                                <select 
-                                    className="form-select" 
-                                    name="environmental_concerns" 
-                                    onChange={handleFormChange}
-                                >
-                                    <option value="">Select an option</option>
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="form-label">Location Preference</label>
-                            <div className="d-flex gap-3">
-                                <div className="form-check">
-                                    <input
-                                        className="form-check-input"
-                                        type="radio"
-                                        name="preference"
-                                        value="mountains"
-                                        checked={formData.preference === "mountains"}
+        <div className="row justify-content-center">
+            <div className="col-md-8">
+                <div className="card shadow">
+                    <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h3 className="mb-0">Travel Profile</h3>
+                        <button className='btn btn-light mb-3' onClick={minimizeForm}>
+                            {visible ? "Hide Form" : "Show Form"}
+                        </button>    
+                    </div>
+        {visible && (
+                    <div className="card-body">
+                        <form onSubmit={handleFormSubmit}>
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Age</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-control" 
+                                        name="age" 
+                                        placeholder="Enter your age" 
                                         onChange={handleFormChange}
-                                        id="pref-mountains"
                                     />
-                                    <label className="form-check-label" htmlFor="pref-mountains">
-                                        Mountains
-                                    </label>
                                 </div>
-                                <div className="form-check">
-                                    <input
-                                        className="form-check-input"
-                                        type="radio"
-                                        name="preference"
-                                        value="beaches"
-                                        checked={formData.preference === "beaches"}
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Gender</label>
+                                    <select 
+                                        className="form-select" 
+                                        name="gender" 
                                         onChange={handleFormChange}
-                                        id="pref-beaches"
-                                    />
-                                    <label className="form-check-label" htmlFor="pref-beaches">
-                                        Beaches
-                                    </label>
+                                    >
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="non-binary">Non-Binary</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="mb-3">
-                            <label className="form-label">Describe your ideal travel experience</label>
-                            <textarea
-                                className="form-control"
-                                name="text"
-                                placeholder="Tell us about your perfect vacation..."
-                                onChange={handleFormChange}
-                                rows="4"
-                            />
-                        </div>
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Annual Income</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-control" 
+                                        name="income" 
+                                        placeholder="Enter your income" 
+                                        onChange={handleFormChange}
+                                    />
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Education Level</label>
+                                    <select 
+                                        className="form-select" 
+                                        name="education_level" 
+                                        onChange={handleFormChange}
+                                    >
+                                        <option value="">Select Education Level</option>
+                                        <option value="high school">High School</option>
+                                        <option value="bachelor">Bachelor</option>
+                                        <option value="master">Master</option>
+                                        <option value="doctorate">Doctorate</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div className="text-center">
-                            <button type="submit" className="btn btn-primary px-5">
-                                Submit Profile
-                            </button>
-                        </div>
-                    </form>
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Travel Frequency (trips per year)</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-control" 
+                                        name="travel_frequency" 
+                                        placeholder="Number of trips per year" 
+                                        onChange={handleFormChange}
+                                    />
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Vacation Budget</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-control" 
+                                        name="vacation_budget" 
+                                        placeholder="Enter your budget" 
+                                        onChange={handleFormChange}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label">Preferred Activities</label>
+                                <div className="d-flex gap-3">
+                                    {["Sunbathing", "Hiking", "Swimming", "Skiing"].map((activity) => {
+                                        const lowerCaseActivity = activity.toLowerCase();
+                                        return (
+                                            <div className="form-check" key={lowerCaseActivity}>
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="preferred_activities"
+                                                    value={lowerCaseActivity}
+                                                    checked={formData.preferred_activities === lowerCaseActivity}
+                                                    onChange={handleFormChange}
+                                                    id={`activity-${lowerCaseActivity}`}
+                                                />
+                                                <label className="form-check-label" htmlFor={`activity-${lowerCaseActivity}`}>
+                                                    {activity}
+                                                </label>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Current Location</label>
+                                    <select 
+                                        className="form-select" 
+                                        name="location" 
+                                        onChange={handleFormChange}
+                                    >
+                                        <option value="">Select Location Type</option>
+                                        <option value="urban">Urban</option>
+                                        <option value="suburban">Suburban</option>
+                                        <option value="rural">Rural</option>
+                                    </select>
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Favorite Season</label>
+                                    <select 
+                                        className="form-select" 
+                                        name="favorite_season" 
+                                        onChange={handleFormChange}
+                                    >
+                                        <option value="">Select Favorite Season</option>
+                                        <option value="winter">Winter</option>
+                                        <option value="spring">Spring</option>
+                                        <option value="summer">Summer</option>
+                                        <option value="fall">Fall</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Do you have pets?</label>
+                                    <select 
+                                        className="form-select" 
+                                        name="pets" 
+                                        onChange={handleFormChange}
+                                    >
+                                        <option value="">Select an option</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Environmental Concerns?</label>
+                                    <select 
+                                        className="form-select" 
+                                        name="environmental_concerns" 
+                                        onChange={handleFormChange}
+                                    >
+                                        <option value="">Select an option</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label">Location Preference</label>
+                                <div className="d-flex gap-3">
+                                    <div className="form-check">
+                                        <input
+                                            className="form-check-input"
+                                            type="radio"
+                                            name="preference"
+                                            value="mountains"
+                                            checked={formData.preference === "mountains"}
+                                            onChange={handleFormChange}
+                                            id="pref-mountains"
+                                        />
+                                        <label className="form-check-label" htmlFor="pref-mountains">
+                                            Mountains
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input
+                                            className="form-check-input"
+                                            type="radio"
+                                            name="preference"
+                                            value="beaches"
+                                            checked={formData.preference === "beaches"}
+                                            onChange={handleFormChange}
+                                            id="pref-beaches"
+                                        />
+                                        <label className="form-check-label" htmlFor="pref-beaches">
+                                            Beaches
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label">Describe your ideal travel experience</label>
+                                <textarea
+                                    className="form-control"
+                                    name="text"
+                                    placeholder="Tell us about your perfect vacation..."
+                                    onChange={handleFormChange}
+                                    rows="4"
+                                />
+                            </div>
+
+                            <div className="text-center">
+                                <button type="submit" className="btn btn-primary px-5">
+                                    Submit Profile
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    )}
+
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
   )
