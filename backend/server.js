@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 4000;
 // Test Database Connection
 app.get("/test-db", async (req, res) => {
     try {
-      const result = await db.any("SELECT * FROM users");
+      const result = await db.any("SELECT * FROM users LIMIT 10");
       res.json(result);
     } catch (error) {
       console.error("❌ Database connection error:", error)
