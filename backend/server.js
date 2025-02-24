@@ -83,6 +83,11 @@ setTimeout(() => {
     console.log("✅ Route debugging complete.");
 }, 2000);
 
+app.get("/api/health", (req, res) => {
+    res.json({ status: "ok" });
+});
+
+
 
 //Start Server
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
