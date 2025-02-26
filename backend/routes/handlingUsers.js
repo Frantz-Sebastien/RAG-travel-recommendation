@@ -220,7 +220,7 @@ router.post("/find-similar-users", async (req, res) => {
           const topGender = mostCommon(genderList);
   
           //Step 5: Generate AI response using Gemini API
-          const model = genAI.getGenerativeModel({ model: "gemini-pro" }); // ✅ Removed extra space in model name
+          const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-002" }); // ✅ Removed extra space in model name
   
           const prompt = `
           A user is looking for a personalized travel recommendation. Here's some information about them:
