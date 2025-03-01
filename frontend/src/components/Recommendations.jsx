@@ -79,6 +79,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? import.meta.env.VITE_BACKEND_URL
+    : import.meta.env.VITE_BACKEND_URL_PROD;
+
 const Recommendations = ({ userId, text }) => {
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -98,7 +103,7 @@ const Recommendations = ({ userId, text }) => {
             }
             console.log(`🔍 Fetching recommendations for user ID: ${userId}`);
             try {
-                const response = await axios.post("http://localhost:4000/users/get-recommendations", { userId, text });
+                const response = await axios.post(`${API_URL}/users/get-recommendations`, { userId, text });
                 console.log("📌 Recommendations received:", response.data.recommendations);
                 setRecommendations(response.data.recommendations);
             } catch (error) {
