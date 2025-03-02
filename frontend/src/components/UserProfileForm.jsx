@@ -47,24 +47,50 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
         try{
             const response = await axios.post(`${API_URL}/users/create`, fullFormData)
             const userId = response.data.userId
+
+            if (!userId) {
+                throw new Error("User ID missing in response.");
+            }
+
             console.log(`This is the id that SQL created for us: ${userId}`)
             setUserId(userId) //added this line also, UPDATED
-
             alert(`✅ Profile successfully created! User ID: ${userId}`);
 
             await onEmbeddingGenerated(userId)
             
             //Send text input to generate embedding
             if(formData.text){
-                await axios.post(`${API_URL}/generate-embedding`,{
-                    userId,
-                    text: formData.text
+                try{
+                    await axios.post(`${API_URL}/generate-embedding`,{
+                        userId,
+                        text: formData.text
+
                 })
                 alert("✅ Embedding successfully generated!");
+                
+            } catch(embeddingError){
+                console.error("❌ Error generating embedding:", embeddingError)
+                alert("⚠️ Embedding generation failed. You may not get personalized recommendations.");
+            }
             }
         } catch(error){
             console.error("❌ Error submitting form:", error)
-            alert("❌ Failed to submit form. Please try again.")
+
+            if(error.response){
+                const { status, data } = error.response
+
+                if(status === 400){
+                    alert(`⚠️ Validation error: ${data?.error || "Invalid input. Please check all fields."}`)
+                } else if (status === 500){
+                    alert("❌ Server error! Please try again later.")
+                } else {
+                    alert(alert(`❌ Unexpected error: ${status} - ${data?.error || "Unknown issue"}`))
+                }
+            } else if(error.request){
+                alert("⚠️ No response from the server. Please check your internet connection.")
+            } else{
+                alert("❌ Failed to submit form. Please try again.")
+            }
         }
     }
 
