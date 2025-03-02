@@ -3,9 +3,9 @@ import axios from "axios";
 
 
 const API_URL =
-  import.meta.env.MODE === "development"
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
+ /* import.meta.env.MODE === "development" 
+    ? */ import.meta.env.VITE_BACKEND_URL
+   /* : import.meta.env.VITE_BACKEND_URL_PROD; */
 
 
 
@@ -13,7 +13,7 @@ const PingTest = () => {
     const [message, setMessage] = useState("No response yet...");
 
     useEffect(() => {
-        axios.get(`${API_URL}/users/ping`)
+        axios.get(`http://localhost:4000/users/ping`)
             .then(response => {
                 setMessage(response.data.message);
             })
