@@ -5,6 +5,11 @@ import axios from "axios";
 
 //Line 14 was updated
 
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? import.meta.env.VITE_BACKEND_URL
+    : import.meta.env.VITE_BACKEND_URL_PROD;
+
 const Profile = () => {
     const [userId, setUserId] = useState(null);
     const [embeddingGenerated, setEmbeddingGenerated] = useState(false) //UPDATE
@@ -18,7 +23,7 @@ const Profile = () => {
         console.log(`📌 Generating embedding for user ID: ${newUserId}`)
 
         try {
-            await axios.post("http://localhost:4000/embeddings/generate-embedding", {
+            await axios.post(`${API_URL}/embeddings/generate-embedding`, {
                 userId: newUserId,
                 text: `User ${newUserId}'s travel preferences`
             });
