@@ -6,6 +6,11 @@ const API_URL =
         ?  import.meta.env.VITE_BACKEND_URL
         : import.meta.env.VITE_BACKEND_URL_PROD; 
 
+
+        console.log("🟢 API_URL:", API_URL);
+        console.log("🟢 VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
+        console.log("🟢 VITE_BACKEND_URL_PROD:", import.meta.env.VITE_BACKEND_URL_PROD);
+
 //UPDATED line 5
 const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
     const [formData, setFormData] = useState({
