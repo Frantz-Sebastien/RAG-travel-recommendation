@@ -2,10 +2,9 @@ import { useState } from 'react'
 import axios from "axios"
 
 const API_URL =
-  import.meta.env.MODE === "development"
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
-
+    import.meta.env.MODE === "development" 
+        ?  import.meta.env.VITE_BACKEND_URL
+        : import.meta.env.VITE_BACKEND_URL_PROD; 
 
 //UPDATED line 5
 const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
@@ -56,7 +55,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
             
             //Send text input to generate embedding
             if(formData.text){
-                await axios.post(`${API_URL}/generate-embedding`,{
+                await axios.post(`${API_URL}/embeddings/generate-embedding`,{
                     userId,
                     text: formData.text
                 })

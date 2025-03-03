@@ -2,9 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 
 const API_URL =
-  import.meta.env.MODE === "development"
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
+    import.meta.env.MODE === "development" 
+        ?  import.meta.env.VITE_BACKEND_URL
+        : import.meta.env.VITE_BACKEND_URL_PROD; 
 
 
 const EchoTest = () => {

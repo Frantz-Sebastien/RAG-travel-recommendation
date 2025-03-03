@@ -6,9 +6,9 @@ import axios from "axios";
 //Line 14 was updated
 
 const API_URL =
-  import.meta.env.MODE === "development"
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
+    import.meta.env.MODE === "development" 
+        ?  import.meta.env.VITE_BACKEND_URL
+        : import.meta.env.VITE_BACKEND_URL_PROD; 
 
 const Profile = () => {
     const [userId, setUserId] = useState(null);

@@ -18,6 +18,15 @@ const cn = process.env.DATABASE_URL || {
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false, // Required for Supabase
 };
 
+// const cn = 
+//   {user: process.env.PG_USER || "fsmathias",
+//   host: process.env.PG_HOST || "localhost",
+//   database: process.env.PG_NAME || "travel_recommendation",
+//   port: process.env.PG_PORT || 5432, // Default PostgreSQL port
+//   }
+  
+
+
 const db = pgp(cn);
 
 export default db;

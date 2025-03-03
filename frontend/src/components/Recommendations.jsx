@@ -80,9 +80,9 @@ import axios from "axios";
 import ReactMarkdown from "react-markdown";
 
 const API_URL =
-  import.meta.env.MODE === "development"
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.VITE_BACKEND_URL_PROD;
+    import.meta.env.MODE === "development" 
+        ?  import.meta.env.VITE_BACKEND_URL
+        : import.meta.env.VITE_BACKEND_URL_PROD; 
 
 const Recommendations = ({ userId, text }) => {
     const [recommendations, setRecommendations] = useState([]);
