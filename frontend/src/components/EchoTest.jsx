@@ -2,9 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 
 const API_URL =
- /* import.meta.env.MODE === "development" 
-    ? */ import.meta.env.VITE_BACKEND_URL
-   /* : import.meta.env.VITE_BACKEND_URL_PROD; */
+    import.meta.env.MODE === "development" 
+        ?  import.meta.env.VITE_BACKEND_URL
+        : import.meta.env.VITE_BACKEND_URL_PROD; 
 
 
 const EchoTest = () => {
@@ -15,7 +15,7 @@ const EchoTest = () => {
         event.preventDefault();
 
         try {
-            const response = await axios.post(`http://localhost:4000/users/echo`, { message: inputText });
+            const response = await axios.post(`${API_URL}/users/echo`, { message: inputText });
             setResponseMessage(response.data.response);
         } catch (error) {
             console.error("❌ Error submitting data:", error);

@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import axios from "axios"
 
+const API_URL =
+    import.meta.env.MODE === "development" 
+        ?  import.meta.env.VITE_BACKEND_URL
+        : import.meta.env.VITE_BACKEND_URL_PROD; 
+
 //UPDATED line 5
 const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
     const [formData, setFormData] = useState({
@@ -39,7 +44,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
         setText(fullFormData.text)
 
         try{
-            const response = await axios.post("http://localhost:4000/users/create", fullFormData)
+            const response = await axios.post(`${API_URL}/users/create`, fullFormData)
             const userId = response.data.userId
             console.log(`This is the id that SQL created for us: ${userId}`)
             setUserId(userId) //added this line also, UPDATED
@@ -50,7 +55,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
             
             //Send text input to generate embedding
             if(formData.text){
-                await axios.post("http://localhost:4000/embeddings/generate-embedding",{
+                await axios.post(`${API_URL}/embeddings/generate-embedding`,{
                     userId,
                     text: formData.text
                 })
