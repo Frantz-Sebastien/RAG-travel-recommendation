@@ -38,7 +38,7 @@ const Profile = () => {
     console.log("🔍 Current userId in Profile.jsx:", userId); // ✅ Debugging Log
 
     return (
-        <div className="">
+        <div>
             <h1 className="display-4 text-black text-center" >Personalized Travel Recommender</h1>
             <UserProfileForm setUserId={setUserId} onEmbeddingGenerated={handleUserCreated} setText={setText}/>
             {userId && embeddingGenerated ?  <Recommendations userId={userId} text={text} /> : <p className="text-center mt-2">Recommendation will appear down here</p>} 
