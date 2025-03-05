@@ -70,21 +70,21 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
             console.error("❌ Error submitting form:", error)
             alert("❌ Failed to submit form. Please try again.")
         }
-    }
+    } 
 
   return (
-    <div className="container py-4">
-    <div className="row justify-content-center">
-        <div className="col-md-8">
-            <div className="card shadow">
-                <div className="card-header bg-primary text-white">
-                    <h3 className="mb-0">Travel Profile</h3>
+    <div className="container d-flex justify-content-center align-items-center min-vh-100">  {/* container py-4 */}
+    <div className="row justify-content-center w-100"> {/* row justify-content-center */}
+        <div className="col-md-8 col-lg-6"> {/* col-md-8 */}
+            <div className="card shadow-lg">  {/* card shadow */}
+                <div className="card-header bg-primary text-white text-center">  {/*card-header bg-primary text-white*/}
+                    <h3 className="mb-0">Travel Profile</h3>  {/* */}
                 </div>
-                <div className="card-body">
-                    <form onSubmit={handleFormSubmit}>
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Age</label>
+                <div className="card-body">  {/* */}
+                    <form onSubmit={handleFormSubmit}>  {/* */}
+                        <div className="row">  {/* */}
+                            <div className="col-md-6 mb-3">  {/* */}
+                                <label className="form-label">Age</label>  {/* form-label*/}
                                 <input 
                                     type="number" 
                                     className="form-control" 
@@ -93,8 +93,8 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                                     onChange={handleFormChange}
                                 />
                             </div>
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Gender</label>
+                            <div className="col-md-6 mb-3">  {/* */}
+                                <label className="form-label">Gender</label>  {/* */}
                                 <select 
                                     className="form-select" 
                                     name="gender" 
@@ -108,9 +108,9 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                             </div>
                         </div>
 
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className="form-label">Annual Income</label>
+                        <div className="row">  {/* */}
+                            <div className="col-md-6 mb-3">  {/* */}
+                                <label className="form-label">Annual Income</label>  {/* */}
                                 <input 
                                     type="number" 
                                     className="form-control" 
@@ -119,7 +119,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                                     onChange={handleFormChange}
                                 />
                             </div>
-                            <div className="col-md-6 mb-3">
+                            <div className="col-md-6 mb-3">  {/* */}
                                 <label className="form-label">Education Level</label>
                                 <select 
                                     className="form-select" 
@@ -135,8 +135,8 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                             </div>
                         </div>
 
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
+                        <div className="row">  {/* */}
+                            <div className="col-md-6 mb-3">  {/* */}
                                 <label className="form-label">Travel Frequency (trips per year)</label>
                                 <input 
                                     type="number" 
@@ -146,7 +146,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                                     onChange={handleFormChange}
                                 />
                             </div>
-                            <div className="col-md-6 mb-3">
+                            <div className="col-md-6 mb-3">  {/* */}
                                 <label className="form-label">Vacation Budget</label>
                                 <input 
                                     type="number" 
@@ -158,9 +158,9 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                             </div>
                         </div>
 
-                        <div className="mb-3">
-                            <label className="form-label">Preferred Activities</label>
-                            <div className="d-flex gap-3">
+                        <div className="mb-3">  {/* */}
+                            <label className="form-label">Preferred Activities</label>  {/* */}
+                            <div className="d-flex gap-3">  {/* */}
                                 {["Sunbathing", "Hiking", "Swimming", "Skiing"].map((activity) => {
                                     const lowerCaseActivity = activity.toLowerCase();
                                     return (
@@ -184,7 +184,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                         </div>
 
                         <div className="row">
-                            <div className="col-md-6 mb-3">
+                            <div className="col-md-6 mb-3">  {/* */}
                                 <label className="form-label">Current Location</label>
                                 <select 
                                     className="form-select" 
@@ -197,7 +197,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                                     <option value="rural">Rural</option>
                                 </select>
                             </div>
-                            <div className="col-md-6 mb-3">
+                            <div className="col-md-6 mb-3">  {/* */}
                                 <label className="form-label">Favorite Season</label>
                                 <select 
                                     className="form-select" 
@@ -214,7 +214,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                         </div>
 
                         <div className="row">
-                            <div className="col-md-6 mb-3">
+                            <div className="col-md-6 mb-3">  {/* */}
                                 <label className="form-label">Do you have pets?</label>
                                 <select 
                                     className="form-select" 
@@ -226,7 +226,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                                     <option value="no">No</option>
                                 </select>
                             </div>
-                            <div className="col-md-6 mb-3">
+                            <div className="col-md-6 mb-3">  {/* */}
                                 <label className="form-label">Environmental Concerns?</label>
                                 <select 
                                     className="form-select" 
@@ -240,9 +240,9 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                             </div>
                         </div>
 
-                        <div className="mb-3">
+                        <div className="mb-3">  {/* */}
                             <label className="form-label">Location Preference</label>
-                            <div className="d-flex gap-3">
+                            <div className="d-flex gap-3">  {/* */}
                                 <div className="form-check">
                                     <input
                                         className="form-check-input"
@@ -274,7 +274,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                             </div>
                         </div>
 
-                        <div className="mb-3">
+                        <div className="mb-3">  {/* */}
                             <label className="form-label">Describe your ideal travel experience</label>
                             <textarea
                                 className="form-control"
@@ -285,8 +285,8 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
                             />
                         </div>
 
-                        <div className="text-center">
-                            <button type="submit" className="btn btn-primary px-5">
+                        <div className="text-center"> {/* text-center */}
+                            <button type="submit" className="btn btn-primary px-5"> {/* btn btn-primary px-5  */}
                                 Submit Profile
                             </button>
                         </div>
