@@ -1,0 +1,53 @@
+/* Full-Screen background slider */
+
+.background-slider {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    animation: slideBackground 20s linear infinite;
+
+}
+
+@keyframes slideBackground {
+    0% {
+        background-image: url("../public/vacationImages/pexels-alexmoliski-28969898.jpg");
+    }
+    25% {
+        background-image: url("../public/vacationImages/pexels-asadphoto-1024989.jpg");
+    }
+    50% {
+        background-image: url("../public/vacationImages/pexels-asadphoto-1268855.jpg");
+    }
+    75% {
+        background-image: url("../public/vacationImages/pexels-asadphoto-457882.jpg");
+    }
+    100% {
+        background-image: url("../public/vacationImages/pexels-fmaderebner-238622.jpg");
+    }
+    /* 0% {
+        background-image: url("../public/vacationImages/pexels-freestockpro-1008155.jpg");
+    }
+    0% {
+        background-image: url("../public/vacationImages/pexels-jimmy-teoh-294331-1010657.jpg");
+    }
+    0% {
+        background-image: url("../public/vacationImages/pexels-mohamed-hussain-629997-30951335.jpg");
+    }
+    0% {
+        background-image: url("../public/vacationImages/pexels-pixabay-208701.jpg");
+    }
+    0% {
+        background-image: url("../public/vacationImages/pexels-pixabay-38238.jpg");
+    }
+    0% {
+        background-image: url("../public/vacationImages/pexels-recalmedia-60217.jpg");
+    }
+    0% {
+        background-image: url("../public/vacationImages/pexels-riciardus-307008.jpg");
+    }*/
+} 
