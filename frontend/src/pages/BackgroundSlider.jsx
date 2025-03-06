@@ -2,38 +2,38 @@ import React, { useState, useEffect } from "react";
 import "../styles/BackgroundSlider.css"; // Keep your CSS for general styling
 
 const images = [
-  "/vacationImages/pexels-alexmoliski-28969898.jpg",//
-  "/vacationImages/pexels-andre-furtado-43594-2916817.jpg",//
-  "/vacationImages/pexels-vome-3800412.jpg", //
-  "/vacationImages/pexels-andrew-harvard-1340985-4846144.jpg",//
-  "/vacationImages/pexels-andrew-harvard-1340985-11311701.jpg",//
-  "/vacationImages/pexels-asadphoto-457882.jpg",//
-  "/vacationImages/pexels-asadphoto-1024989.jpg",//
-  "/vacationImages/pexels-asadphoto-1268855.jpg",//
-  "/vacationImages/pexels-axp-photography-500641970-19149614.jpg",//
-  "/vacationImages/pexels-chiecharon-672358.jpg",//
-  "/vacationImages/pexels-christian-alemu-127251395-30999221.jpg",//
-  "/vacationImages/pexels-clifford-mervil-988071-2398220.jpg",
-  "/vacationImages/pexels-entumoto-17831035.jpg",//
-  "/vacationImages/pexels-fmaderebner-238622.jpg",//
-  "/vacationImages/pexels-cliford-mervil-988071-2398220", //
-  "/vacationImages/pexels-freestockpro-1008155.jpg",//
-  "/vacationImages/pexels-gabriela-palai-129458-404960.jpg",//
-  "/vacationImages/pexels-haleyve-2087391.jpg", //
-  "/vacationImages/pexels-heyho-7746467.jpg",//
-  "/vacationImages/pexels-heyho-7746551.jpg",//
-  "/vacationImages/pexels-jimmy-teoh-294331-1010657.jpg",//
-  "/vacationImages/pexels-kampus-7895758.jpg",//
-  "/vacationImages/pexels-kindelmedia-7863777.jpg", //
-  "/vacationImages/pexels-learda-shkurti-1281959-2446683.jpg", //
-  "/vacationImages/pexels-mohamed-hussain-629997-30951335.jpg",//
-  "/vacationImages/pexels-pixabay-38238.jpg",//
-  "/vacationImages/pexels-pixabay-208701.jpg",//
-  "/vacationImages/pexels-recalmedia-60217.jpg",//
-  "/vacationImages/pexels-riciardus-307008.jpg",//
-  "/vacationImages/pexels-rpnickson-2609463.jpg", //
-  "/vacationImages/pexels-tatianasyrikova-3934023.jpg",//
-  "/vacationImages/pexels-te-lensfix-380994-1371360.jpg"//
+  "/vacationImages/image1.jpg",
+  "/vacationImages/image2.jpg",
+  "/vacationImages/image3.jpg",
+  "/vacationImages/image4.jpg",
+  "/vacationImages/image5.jpg",
+  "/vacationImages/image6.jpg",
+  "/vacationImages/image7.jpg",
+  "/vacationImages/image8.jpg",
+  "/vacationImages/image9.jpg",
+  "/vacationImages/image10.jpg",
+  "/vacationImages/image11.jpg",
+  "/vacationImages/image12.jpg",
+  "/vacationImages/image13.jpg",
+  "/vacationImages/image14.jpg",
+  "/vacationImages/image15.jpg",
+  "/vacationImages/image16.jpg",
+  "/vacationImages/image17.jpg",
+  "/vacationImages/image18.jpg",
+  "/vacationImages/image19.jpg",
+  "/vacationImages/image20.jpg",
+  "/vacationImages/image21.jpg",
+  "/vacationImages/image22.jpg",
+  "/vacationImages/image23.jpg",
+  "/vacationImages/image24.jpg",
+  "/vacationImages/image25.jpg",
+  "/vacationImages/image26.jpg",
+  "/vacationImages/image27.jpg",
+  "/vacationImages/image28.jpg",
+  "/vacationImages/image29.jpg",
+  "/vacationImages/image30.jpg",
+  "/vacationImages/image31.jpg"
+  
 ];
 
 // Function to shuffle an array (Fisher-Yates Algorithm)
@@ -51,7 +51,8 @@ const BackgroundSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    
+    console.log("Currently displaying:", shuffledImages[currentIndex]); // Logs each image change
+
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => {
         if (prevIndex + 1 < shuffledImages.length) {
@@ -64,8 +65,8 @@ const BackgroundSlider = () => {
       });
     }, 12000); // Change every 12 seconds
 
-    return () => clearInterval(interval);
-  }, [shuffledImages]);
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [currentIndex, shuffledImages]); // Dependencies
 
   return (
     <div
