@@ -51,6 +51,7 @@ const BackgroundSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => {
         if (prevIndex + 1 < shuffledImages.length) {
