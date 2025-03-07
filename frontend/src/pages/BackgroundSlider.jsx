@@ -164,8 +164,16 @@ const BackgroundSlider = () => {
 
   return (
     <div className="background-wrapper">
+      {/* Old Image (Stays until transition is complete) */}
       <div
-        key={currentIndex} // Ensure React correctly re-renders the new image
+        className="background-slider fade-out"
+        style={{
+          backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
+        }}
+      ></div>
+  
+      {/* New Image (Fades in on top) */}
+      <div
         className="background-slider fade-in"
         style={{
           backgroundImage: `url(${shuffledImages[currentIndex]})`,
@@ -173,6 +181,7 @@ const BackgroundSlider = () => {
       ></div>
     </div>
   );
+  
   
 };
 
