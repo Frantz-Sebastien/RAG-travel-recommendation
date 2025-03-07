@@ -108,13 +108,18 @@ const BackgroundSlider = () => {
     
     console.log("Currently displaying:", shuffledImages[currentIndex]); // Logs each image change
 
+    //Preload the next image before switching
+    const nextIndex = (currentIndex + 1) % shuffledImages.length
+    const img = new Image()
+    img.src = shuffledImages[nextIndex]
+
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => {
         if (prevIndex + 1 < shuffledImages.length) {
           return prevIndex + 1;
         } else {
           // If we reach the end, reshuffle and restart at 0
-          setShuffledImages(shuffleArray(desktopImages));
+          setShuffledImages(shuffleArray(mobilePhone ? mobileImages : desktopImages));
           return 0;
         }
       });
