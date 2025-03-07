@@ -124,28 +124,36 @@ const BackgroundSlider = () => {
           return 0;
         }
       });
-    }, 12000); // Change every 12 seconds
+    }, 7000); // Change every 7 seconds
 
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, [currentIndex, shuffledImages]); // Dependencies
 
-  return (
-    <div className="background-container">
+  // return (
+  //   <div className="background-container">
+  //     <div
+  //       className="background-slider previous-image" //old image will fade out
+  //       style={{
+  //         backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
+  //       }}
+  //     ></div>
+  //     <div
+  //       className="background-slider next-image" //new image will fade in
+  //       style={{
+  //         backgroundImage: `url(${shuffledImages[currentIndex]})`,
+  //       }}
+  //     ></div>
+
+  //   </div>
+  // );
+    return (
       <div
-        className="background-slider previous-image" //old image will fade out
-        style={{
-          backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
-        }}
-      ></div>
-      <div
-        className="background-slider next-image" //new image will fade in
+        className="background-slider"
         style={{
           backgroundImage: `url(${shuffledImages[currentIndex]})`,
         }}
       ></div>
-
-    </div>
-  );
+    );
   
   
 };
