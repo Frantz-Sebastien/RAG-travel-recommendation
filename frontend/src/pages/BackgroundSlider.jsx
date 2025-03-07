@@ -108,43 +108,72 @@ const BackgroundSlider = () => {
     
     console.log("Currently displaying:", shuffledImages[currentIndex]); // Logs each image change
 
-    //Preload the next image before switching
-    const nextIndex = (currentIndex + 1) % shuffledImages.length
-    const img = new Image()
-    img.src = shuffledImages[nextIndex]
+    //top
+      // Preload the next image before switching
+  const nextIndex = (currentIndex + 1) % shuffledImages.length;
+  const img = new Image();
+  img.src = shuffledImages[nextIndex];
 
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => {
-        if (prevIndex + 1 < shuffledImages.length) {
-          return prevIndex + 1;
-        } else {
-          // If we reach the end, reshuffle and restart at 0
-          setShuffledImages(shuffleArray(mobilePhone ? mobileImages : desktopImages));
-          return 0;
-        }
-      });
-    }, 12000); // Change every 12 seconds
+  const interval = setTimeout(() => { // Use setTimeout instead of setInterval for smoother transition
+    setCurrentIndex(nextIndex);
+  }, 12000); // Change every 12 seconds
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, [currentIndex, shuffledImages]); // Dependencies
+  return () => clearTimeout(interval); // Cleanup timer on unmount
+}, [currentIndex, shuffledImages]);
+  //bottom
+
+
+
+  //   //Preload the next image before switching
+  //   const nextIndex = (currentIndex + 1) % shuffledImages.length
+  //   const img = new Image()
+  //   img.src = shuffledImages[nextIndex]
+
+  //   const interval = setInterval(() => {
+  //     setCurrentIndex((prevIndex) => {
+  //       if (prevIndex + 1 < shuffledImages.length) {
+  //         return prevIndex + 1;
+  //       } else {
+  //         // If we reach the end, reshuffle and restart at 0
+  //         setShuffledImages(shuffleArray(mobilePhone ? mobileImages : desktopImages));
+  //         return 0;
+  //       }
+  //     });
+  //   }, 12000); // Change every 12 seconds
+
+  //   return () => clearInterval(interval); // Cleanup interval on unmount
+  // }, [currentIndex, shuffledImages]); // Dependencies
+
+  // return (
+  //   <div className="background-container">
+  //     <div
+  //       className="background-slider previous-image" //old image will fade out
+  //       style={{
+  //         backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
+  //       }}
+  //     ></div>
+  //     <div
+  //       className="background-slider next-image" //new image will fade in
+  //       style={{
+  //         backgroundImage: `url(${shuffledImages[currentIndex]})`,
+  //       }}
+  //     ></div>
+
+  //   </div>
+  // );
 
   return (
-    <div className="background-container">
+    <div className="background-wrapper">
       <div
-        className="background-slider previous-image" //old image will fade out
-        style={{
-          backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
-        }}
-      ></div>
-      <div
-        className="background-slider next-image" //new image will fade in
+        key={currentIndex} // Ensure React correctly re-renders the new image
+        className="background-slider fade-in"
         style={{
           backgroundImage: `url(${shuffledImages[currentIndex]})`,
         }}
       ></div>
-
     </div>
   );
+  
 };
 
 export default BackgroundSlider;

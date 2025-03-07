@@ -1,4 +1,4 @@
-.background-container {
+.background-wrapper {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,7 +8,6 @@
     overflow: hidden;
 }
 
-/* Full-Screen Background Slider */
 .background-slider {
     position: absolute;
     width: 100%;
@@ -16,30 +15,19 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transition: opacity 3s ease-in-out;
-}
-
-/* Ensures the old image stays visible and fades out */
-.background-slider.previous-image {
-    opacity: 1;
-    animation: fadeOut 3s ease-in-out forwards;
-}
-
-/* Fades in the new image */
-.background-slider.next-image{
     opacity: 0;
     animation: fadeIn 3s ease-in-out forwards;
 }
 
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
 
 
 
