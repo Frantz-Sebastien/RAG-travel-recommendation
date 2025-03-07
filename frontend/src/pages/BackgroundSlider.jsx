@@ -129,12 +129,21 @@ const BackgroundSlider = () => {
   }, [currentIndex, shuffledImages]); // Dependencies
 
   return (
-    <div
-      className="background-slider"
-      style={{
-        backgroundImage: `url(${shuffledImages[currentIndex]})`,
-      }}
-    ></div>
+    <div className="background-container">
+      <div
+        className="background-slider previous-image"
+        style={{
+          backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
+        }}
+      ></div>
+      <div
+        className="background-slider next-image"
+        style={{
+          backgroundImage: `url(${shuffledImages[currentIndex]})`,
+        }}
+      ></div>
+
+    </div>
   );
 };
 
