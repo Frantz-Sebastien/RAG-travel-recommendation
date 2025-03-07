@@ -1,4 +1,4 @@
-.background-wrapper {
+.background-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,6 +8,7 @@
     overflow: hidden;
 }
 
+/* Full-Screen Background Slider */
 .background-slider {
     position: absolute;
     width: 100%;
@@ -18,28 +19,27 @@
     transition: opacity 3s ease-in-out;
 }
 
-/* OLD IMAGE: Slowly fades out */
-.background-slider.fade-out {
+/* Ensures the old image stays visible and fades out */
+.background-slider.previous-image {
     opacity: 1;
     animation: fadeOut 3s ease-in-out forwards;
 }
 
-/* NEW IMAGE: Starts invisible, then fades in */
-.background-slider.fade-in {
+/* Fades in the new image */
+.background-slider.next-image{
     opacity: 0;
     animation: fadeIn 3s ease-in-out forwards;
 }
 
 @keyframes fadeOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
-
 
 
 
