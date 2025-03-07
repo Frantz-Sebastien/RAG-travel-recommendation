@@ -131,13 +131,13 @@ const BackgroundSlider = () => {
   return (
     <div className="background-container">
       <div
-        className="background-slider previous-image"
+        className="background-slider previous-image" //old image will fade out
         style={{
           backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
         }}
       ></div>
       <div
-        className="background-slider next-image"
+        className="background-slider next-image" //new image will fade in
         style={{
           backgroundImage: `url(${shuffledImages[currentIndex]})`,
         }}
