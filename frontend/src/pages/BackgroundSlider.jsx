@@ -84,16 +84,16 @@ const shuffleArray = (array) => {
 };
 
 const BackgroundSlider = () => {
-  const [mobilePhone, setMobilePhone] = useState(window.innerWidth <= 768); //
-  const [shuffledImages, setShuffledImages] = useState(() => shuffleArray(mobilePhone ? mobileImages : desktopImages));
+  const [screenSize, setScreenSize] = useState(window.innerWidth >= 768); //
+  const [shuffledImages, setShuffledImages] = useState(() => shuffleArray(screenSize ? desktopImages : mobileImages));
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
-      if(mobile !== mobilePhone){
-        setMobilePhone(mobile)
+      if(mobile !== screenSize){
+        setScreenSize(mobile)
         setShuffledImages(shuffleArray(mobile ? mobileImages : desktopImages));
         setCurrentIndex(0)
       }
@@ -101,7 +101,7 @@ const BackgroundSlider = () => {
     
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
-  }, [mobilePhone])
+  }, [screenSize])
   
   useEffect(() => {
     // if(shuffledImages.length === 0) return;
@@ -120,7 +120,7 @@ const BackgroundSlider = () => {
           return prevIndex + 1;
         } else {
           // If we reach the end, reshuffle and restart at 0
-          setShuffledImages(shuffleArray(mobilePhone ? mobileImages : desktopImages));
+          setShuffledImages(shuffleArray(screenSize ? mobileImages : desktopImages));
           return 0;
         }
       });
