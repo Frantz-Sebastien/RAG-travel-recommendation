@@ -84,16 +84,16 @@ const shuffleArray = (array) => {
 };
 
 const BackgroundSlider = () => {
-  const [screenSize, setScreenSize] = useState(window.innerWidth >= 768); //
-  const [shuffledImages, setShuffledImages] = useState(() => shuffleArray(screenSize ? desktopImages : mobileImages));
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); //
+  const [shuffledImages, setShuffledImages] = useState(() => shuffleArray(isMobile ? mobileImages : desktopImages));
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
-      if(mobile !== screenSize){
-        setScreenSize(mobile)
+      if(mobile !== isMobile){
+        setIsMobile(mobile)
         setShuffledImages(shuffleArray(mobile ? mobileImages : desktopImages));
         setCurrentIndex(0)
       }
@@ -101,18 +101,21 @@ const BackgroundSlider = () => {
     
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
-  }, [screenSize])
-  
+  }, [isMobile])
+
+  // Preload the next image
   useEffect(() => {
-    // if(shuffledImages.length === 0) return;
+    if (shuffledImages.length === 0) return; // Safeguard
+    const nextIndex = (currentIndex + 1) % shuffledImages.length;
+    const img = new Image();
+    img.src = shuffledImages[nextIndex];
+  }, [currentIndex, shuffledImages]);
+  
+  // Set up the interval for changing images
+  useEffect(() => {
+    if(shuffledImages.length === 0) return;
     
     console.log("Currently displaying:", shuffledImages[currentIndex]); // Logs each image change
-
-
-    //Preload the next image before switching
-    const nextIndex = (currentIndex + 1) % shuffledImages.length
-    const img = new Image()
-    img.src = shuffledImages[nextIndex]
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => {
@@ -120,14 +123,14 @@ const BackgroundSlider = () => {
           return prevIndex + 1;
         } else {
           // If we reach the end, reshuffle and restart at 0
-          setShuffledImages(shuffleArray(screenSize ? mobileImages : desktopImages));
+          setShuffledImages(shuffleArray(isMobile ? mobileImages : desktopImages));
           return 0;
         }
       });
     }, 7000); // Change every 7 seconds
 
     return () => clearInterval(interval); // Cleanup interval on unmount
-  }, [currentIndex, shuffledImages]); // Dependencies
+  }, [currentIndex, shuffledImages, isMobile]); // Dependencies
 
   // return (
   //   <div className="background-container">
