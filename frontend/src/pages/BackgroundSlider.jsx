@@ -140,15 +140,27 @@ const BackgroundSlider = () => {
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, [currentIndex, shuffledImages, isMobile]); // Dependencies
 
-    return (
+  return (
+    <div className="background-wrapper">
+      {/* Old Image (Fades out) */}
       <div
-        className="background-slider"
+        key={currentIndex} // Forces React to re-render when the image changes
+        className="background-slider fade-out"
+        style={{
+          backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
+        }}
+      ></div>
+  
+      {/* New Image (Fades in) */}
+      <div
+        key={currentIndex + "-new"} // Ensures a unique key to trigger React updates
+        className="background-slider fade-in"
         style={{
           backgroundImage: `url(${shuffledImages[currentIndex]})`,
         }}
       ></div>
-    );
-  
+    </div>
+  );
   
 };
 

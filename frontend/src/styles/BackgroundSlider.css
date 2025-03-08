@@ -3,7 +3,7 @@
 
 
 
-.background-slider {
+/* .background-slider {
     position: fixed;
     top: 0;
     left: 0;
@@ -15,9 +15,53 @@
     background-repeat: no-repeat;
     transition: opacity 2s ease-in-out, background-image 5s ease-in-out;
     opacity: 1;
-}
+} */
 
 /* 
 .background-slider.fade-out{
     opacity: 0;
 } */
+
+
+
+.background-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.background-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity 2s ease-in-out;
+}
+
+/* OLD IMAGE: Slowly fades out */
+.background-slider.fade-out {
+    opacity: 1;
+    animation: fadeOut 2s ease-in-out forwards;
+}
+
+/* NEW IMAGE: Starts invisible, then fades in */
+.background-slider.fade-in {
+    opacity: 0;
+    animation: fadeIn 2s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
