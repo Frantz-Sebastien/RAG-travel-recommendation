@@ -113,6 +113,7 @@ const BackgroundSlider = () => {
     //Ensure the image is fully loaded before transitioning
     img.load = () => {
       console.log("Next image preloaded: ", shuffledImages[nextIndex])
+      setTimeout(() => setCurrentIndex(nextIndex), 200)
     }
 
 
