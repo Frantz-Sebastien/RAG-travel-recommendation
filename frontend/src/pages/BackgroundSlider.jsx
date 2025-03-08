@@ -73,7 +73,7 @@ const mobileImages = [
 ]
 
 
-// Function to return a shuffled array (Fisher-Yates Algorithm)
+// Function to return a shuffled array (using Fisher-Yates Algorithm)
 const shuffleArray = (array) => {
   let shuffled = [...array]; // Copy the array to avoid modifying the original
   for (let i = shuffled.length - 1; i > 0; i--) {

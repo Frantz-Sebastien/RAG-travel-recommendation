@@ -41,19 +41,19 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transition: opacity 2s ease-in-out;
+    transition: opacity 4.5s ease-in-out;
 }
 
 /* OLD IMAGE: Slowly fades out */
 .background-slider.fade-out {
     opacity: 1;
-    animation: fadeOut 2s ease-in-out forwards;
+    animation: fadeOut 4.5s ease-in-out forwards;
 }
 
 /* NEW IMAGE: Starts invisible, then fades in */
 .background-slider.fade-in {
     opacity: 0;
-    animation: fadeIn 2s ease-in-out forwards;
+    animation: fadeIn 4.5s ease-in-out forwards;
 }
 
 @keyframes fadeOut {
