@@ -109,6 +109,13 @@ const BackgroundSlider = () => {
     const nextIndex = (currentIndex + 1) % shuffledImages.length;
     const img = new Image();
     img.src = shuffledImages[nextIndex];
+
+    //Ensure the image is fully loaded before transitioning
+    img.load = () => {
+      console.log("Next image preloaded: ", shuffledImages[nextIndex])
+    }
+
+
   }, [currentIndex, shuffledImages]);
   
   // Set up the interval for changing images
@@ -132,23 +139,6 @@ const BackgroundSlider = () => {
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, [currentIndex, shuffledImages, isMobile]); // Dependencies
 
-  // return (
-  //   <div className="background-container">
-  //     <div
-  //       className="background-slider previous-image" //old image will fade out
-  //       style={{
-  //         backgroundImage: `url(${shuffledImages[(currentIndex - 1 + shuffledImages.length) % shuffledImages.length]})`,
-  //       }}
-  //     ></div>
-  //     <div
-  //       className="background-slider next-image" //new image will fade in
-  //       style={{
-  //         backgroundImage: `url(${shuffledImages[currentIndex]})`,
-  //       }}
-  //     ></div>
-
-  //   </div>
-  // );
     return (
       <div
         className="background-slider"
@@ -162,5 +152,3 @@ const BackgroundSlider = () => {
 };
 
 export default BackgroundSlider;
-
-
