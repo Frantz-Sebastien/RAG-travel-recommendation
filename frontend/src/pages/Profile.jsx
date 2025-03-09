@@ -1,9 +1,10 @@
 import UserProfileForm from "../components/UserProfileForm";
 import Recommendations from "../components/Recommendations";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import "../styles/Profile.css"
 import axios from "axios";
+import { desktopImages, mobileImages} from "../data/images.js"
 
-//Line 14 was updated
 
 const API_URL =
     import.meta.env.MODE === "development" 
@@ -14,6 +15,7 @@ const Profile = () => {
     const [userId, setUserId] = useState(null);
     const [embeddingGenerated, setEmbeddingGenerated] = useState(false) //UPDATE
     const [text, setText] = useState("")
+    const [backgroundWallpaper, setBackgroundWallpaper] = useState("")
 
     const handleUserCreated = async (newUserId) => {
         console.log("🚀 handleUserCreated was called with newUserId:", newUserId); // ✅ Debugging log
@@ -37,11 +39,30 @@ const Profile = () => {
 
     console.log("🔍 Current userId in Profile.jsx:", userId); // ✅ Debugging Log
 
+    useEffect(() => {
+        const isMobile = window.innerWidth <= 768; //Detects if a mobile phone or not
+        const imageArray = isMobile ? mobileImages : desktopImages //Choose the correct array depending on the screen width size
+        const randomImage = imageArray[Math.floor(Math.random() * imageArray.length)]; // Pick random image from correct array
+        setBackgroundWallpaper(randomImage); //
+
+
+    }, [])
+
     return (
-        <div>
-            <h1 className="display-4 text-black text-center" >Personalized Travel Recommender</h1>
-            <UserProfileForm setUserId={setUserId} onEmbeddingGenerated={handleUserCreated} setText={setText}/>
-            {userId && embeddingGenerated ?  <Recommendations userId={userId} text={text} /> : <p className="text-center mt-2">Recommendation will appear down here</p>} 
+        <div className="profile-container">
+            <div
+                className="profile-background"
+                style={{
+                    backgroundImage: `url(${backgroundWallpaper})`
+                }}
+            >
+            </div>
+
+                <div className="profile-content" style={{position: "relative", zIndex: 1}}>
+                    <h1 className="display-4 text-black text-center" >Personalized Travel Recommender</h1>
+                    <UserProfileForm setUserId={setUserId} onEmbeddingGenerated={handleUserCreated} setText={setText}/>
+                    {userId && embeddingGenerated ?  <Recommendations userId={userId} text={text} /> : <p className="text-center mt-2">Recommendation will appear down here</p>} 
+                </div>
         </div>
     );
 };

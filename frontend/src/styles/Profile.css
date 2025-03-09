@@ -1,0 +1,11 @@
+.profile-background {
+    background-size: 110vw 110vh; /* Expands background to prevent edges */
+    background-position: center;
+    position: fixed;
+    top: -5vh;
+    left: -5vw;
+    width: 110vw;
+    height: 110vh;
+    filter: blur(8px);
+    z-index: -1;
+}
