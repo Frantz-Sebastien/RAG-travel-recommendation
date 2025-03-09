@@ -302,3 +302,4 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
 
 export default UserProfileForm
 
+
