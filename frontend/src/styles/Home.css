@@ -1,0 +1,37 @@
+/* .button-wrapper {
+    display: inline-block;
+    text-decoration: none; /* Remove link underline 
+} */
+
+.button-wrapper {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:400px; /* Adjust this value to move it lower */
+}
+
+
+/* 🔥 Make the button look modern */
+.custom-btn {
+    background-color: rgba(0, 0, 0, 0.2); /* Deep black background */
+    color: white; /* White text */
+    font-size: 1.5rem; /* Larger text */
+    font-weight: bold;
+    padding: 14px 30px; /* Add proper padding */
+    border-radius: 50px; /* Super smooth rounded edges */
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.9); /* Soft shadow */
+    display: flex; /* Ensures it behaves properly */
+    align-items: center; /* Centers text vertically */
+    justify-content: center; /* Centers text horizontally */
+}
+
+/* 🎨 Add hover effect */
+.custom-btn:hover {
+    background-color: rgb(40, 40, 40); /* Slightly lighter black */
+    transform: scale(1.08); /* Slightly enlarges on hover */
+}
