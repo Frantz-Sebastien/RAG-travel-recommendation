@@ -107,9 +107,9 @@ router.post("/find-similar-users", async (req, res) => {
   })
   
   router.post("/get-recommendations", async (req, res) => {
-      console.log("📌 Received request at /get-recommendations"); //UPDATE
-      console.log("Request body:", req.body); //UPDATE
-      const { userId, text } = req.body; //Deconstructing req.body (req.body is an object)
+      console.log("📌 Received request at /get-recommendations"); //For debugging purposes only
+      console.log("Request body:", req.body); //For debugging purposes only
+      const { userId, text, vacation_budget } = req.body; //Deconstructing req.body (req.body is an object)
   
       //Checking if the user ID is present
       if (!userId || isNaN(userId)) {
@@ -135,8 +135,9 @@ router.post("/find-similar-users", async (req, res) => {
               `SELECT id, embedding <=> $1 AS similarity
               FROM users
               WHERE id != $2
+                AND (embedding <=> $1) < 0.4
               ORDER BY similarity ASC
-              LIMIT 5`,
+              LIMIT 10`,
               [user.embedding, userId]
           );
   
@@ -223,23 +224,23 @@ router.post("/find-similar-users", async (req, res) => {
           const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-002" }); // ✅ Removed extra space in model name
   
           const prompt = `
-          A user is looking for a personalized travel recommendation. Here's some information about them:
+          A user is looking for a personalized travel recommendation. Here's some information about other similar users:
 
           -Favorite Activities: ${topActivity}
           -Preferred Travel Season: ${topSeason}
-          -Vacation Budget: ${topBudget} (IMPORTANT: Stay STRICTLY within this budget)
+          -Vacation Budget: ${topBudget} (IMPORTANT: The user can spend up to ${vacation_budget})
           -Current Location: ${topLocation}
           -Average Income: ${topIncome}
           -Age Group: ${topAge}
           -Gender Identity: ${topGender}
 
-          --User's Own Input: ${text}
+          
 
           ###Generate Their Perfect Trip:
-          Considering all this information, provide a **detailed and engaging** travel recommendation, **making sure the total cost stays WITHIN $${topBudget}.**
+          Considering all this information and the user's Own Input: ${text}, provide a **detailed and engaging** travel recommendation, **making sure the total cost stays close to $${vacation_budget}.**
           - Suggest a **specific destination** that aligns with their preferences **and is within their budget.**
-          - Describe **why** this destination suits them (activity, climate, budget-friendly spots)
-          - Recommend **at least 3 key experiences** they should try.
+          - Describe **why** this destination suits them (activity, climate, budget-friendly spots) **providing specific examples of how costs will be managed.**
+          - Recommend **at least 3 key experiences** they should try. **including estimated costs for each.**
           - If budget is low, suggest **affordable travel options**.
           - If they enjoy socializing, suggest **group-friendly** ideas. If they are lone traveler, suggest **solo-travel-friendly** ideas.
 
