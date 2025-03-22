@@ -227,7 +227,7 @@ router.post("/find-similar-users", async (req, res) => {
 
           -Favorite Activities: ${topActivity}
           -Preferred Travel Season: ${topSeason}
-          -Vacation Budget: ${topBudget}
+          -Vacation Budget: ${topBudget} (IMPORTANT: Stay STRICTLY within this budget)
           -Current Location: ${topLocation}
           -Average Income: ${topIncome}
           -Age Group: ${topAge}
@@ -236,8 +236,8 @@ router.post("/find-similar-users", async (req, res) => {
           --User's Own Input: ${text}
 
           ###Generate Their Perfect Trip:
-          Considering all this information, provide a **detailed and engaging** travel recommendation.
-          - Suggest a **specific destination** that aligns with their preferences.
+          Considering all this information, provide a **detailed and engaging** travel recommendation, **making sure the total cost stays WITHIN $${topBudget}.**
+          - Suggest a **specific destination** that aligns with their preferences **and is within their budget.**
           - Describe **why** this destination suits them (activity, climate, budget-friendly spots)
           - Recommend **at least 3 key experiences** they should try.
           - If budget is low, suggest **affordable travel options**.
