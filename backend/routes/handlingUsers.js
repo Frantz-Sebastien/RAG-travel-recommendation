@@ -15,12 +15,12 @@ function userFriendlyAIResponseAndLocationSeparator(responseTextFromAI){
     const match = responseTextFromAI.match(locationRegex)
     console.log(match) //for Debugging
 
-    const extractedLocation = match ? match[1].trim() : null;
-    console.log(extractedLocation) //for Debugging
-    const userFriendlyResponse = responseTextFromAI.replace(locationRegex, '').trim() 
-    console.log(userFriendlyResponse) //for Debugging
+    const locationData = match ? match[1].trim() : null;
+    console.log(locationData) //for Debugging
+    const userFriendlyAIResponse = responseTextFromAI.replace(locationRegex, '').trim() 
+    console.log(userFriendlyAIResponse) //for Debugging
 
-    return { userFriendlyResponse, extractedLocation }
+    return { userFriendlyAIResponse, locationData }
 
 }
 
