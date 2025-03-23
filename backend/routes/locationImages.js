@@ -8,7 +8,7 @@ const IMAGE_API_KEY = process.env.IMAGE_API_KEY;
 const CSE_ID = process.env.CSE_ID;
 
 // GET route to fetch images for a given location using Google Custom Search
-router.get('/location-image', async (req, res) => {
+router.get('/location-images', async (req, res) => {
   try {
     const { locationName } = req.query;
 
@@ -25,8 +25,8 @@ router.get('/location-image', async (req, res) => {
       cx: CSE_ID,          // Search Engine ID
       q: locationName,            // The search query
       searchType: 'image',        // Tells Google to return images only
-      num: 3                      // Limit how many image results (max 10 for free tier)
-      // Optional: imgSize, fileType, etc. if you want to refine further
+      num: 3                      // Limit how many image results
+      // Optional: imgSize, fileType, etc. I do not know how to do that part properly yet
     };
 
     // Make the request to Google’s Custom Search API
@@ -50,4 +50,6 @@ router.get('/location-image', async (req, res) => {
   }
 });
 
-export default router;
+const locationImagesRoutes = router
+
+export default locationImagesRoutes;

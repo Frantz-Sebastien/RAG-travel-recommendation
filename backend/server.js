@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import handlingUsersRoutes from './routes/handlingUsers.js';
 import embeddingRoutes from './routes/embeddings.js';
+import locationImagesRoutes from './routes/locationImages.js'
 import db from './db/dbConfig.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -36,9 +37,10 @@ app.get("/test-db", async (req, res) => {
   console.log("✅ Registering /users routes...");
 
 
-// Connecting the Routes
-app.use("/users", handlingUsersRoutes)
-app.use("/embeddings", embeddingRoutes)
+// Connecting the Routes (Commenting these out for now to avoid duplicate)
+// app.use("/users", handlingUsersRoutes)
+// app.use("/embeddings", embeddingRoutes)
+// app.use("/images", locationImagesRoutes)
 
 //Test Route (For Debugging)
 app.post('/test', (req, res) => {
@@ -61,6 +63,11 @@ console.log("✅ Successfully registered /users routes!");
 console.log("📌 Registering /embeddings routes...");
 app.use("/embeddings", embeddingRoutes);
 console.log("✅ Successfully registered /embeddings routes!");
+
+// ✅ Register `/images` Routes
+console.log("📌 Registering /embeddings routes...");
+app.use("/images", locationImagesRoutes);
+console.log("✅ Successfully registered /images routes!");
 
 // Debug: Log All Registered Routes
 setTimeout(() => {
