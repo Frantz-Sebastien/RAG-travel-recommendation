@@ -228,7 +228,7 @@ router.post("/find-similar-users", async (req, res) => {
 
           -Favorite Activities: ${topActivity}
           -Preferred Travel Season: ${topSeason}
-          -Vacation Budget: ${topBudget} (IMPORTANT: The user can spend up to ${vacation_budget})
+          -Vacation Budget: ${topBudget} (IMPORTANT: The user can spend up to $${vacation_budget})
           -Current Location: ${topLocation}
           -Average Income: ${topIncome}
           -Age Group: ${topAge}
@@ -245,6 +245,13 @@ router.post("/find-similar-users", async (req, res) => {
           - If they enjoy socializing, suggest **group-friendly** ideas. If they are lone traveler, suggest **solo-travel-friendly** ideas.
 
           Make the response sound **friendly, engaging, and expert-like.** The recommendation should feel like it was a carefully thought out **just for them**.
+
+          **IMPORTANT**:  
+            At the end of your response, add a ONE line in this exact format (with no extra text or punctuation):
+
+            LOCATION: <the destination name>
+
+            Only include that ONE line in the format "LOCATION: destination" and ensure everything else is purely your engaging recommendation text. 
           `;
   
           const result = await model.generateContent(prompt);
