@@ -9,6 +9,21 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 const router = express.Router();
 router.use(express.json()); // ✅ Ensure body parsing
 
+//Function for separating LOCATION from AI response
+function userFriendlyAIResponseAndLocationSeparator(responseTextFromAI){
+    const locationRegex = /LOCATION:\s*(.+)/i; //I'm not familiar with using Regex, but it is helpful to locate specific and case sensitive characters
+    const match = responseTextFromAI.match(locationRegex)
+    console.log(match) //for Debugging
+
+    const extractedLocation = match ? match[1].trim() : null;
+    console.log(extractedLocation) //for Debugging
+    const userFriendlyResponse = responseTextFromAI.replace(locationRegex, '').trim() 
+    console.log(userFriendlyResponse) //for Debugging
+
+    return { userFriendlyResponse, extractedLocation }
+
+}
+
 //Small Test
 router.get("/ping", (req, res) => {
     console.log("📌 Received request at /users/ping");
@@ -256,13 +271,18 @@ router.post("/find-similar-users", async (req, res) => {
   
           const result = await model.generateContent(prompt);
           const aiResponse = await result.response.text(); // ✅ Ensuring proper response handling
+          const { userFriendlyAIResponse, locationData } = userFriendlyAIResponseAndLocationSeparator(aiResponse) //Implementing the function here
   
         //   res.json({ recommendations: aiResponse }); We do not need this line right now..., I have it so that the user is deleted after the recommendation. I will remove this feature once I figure out how to have the users register to the Website.
 
         // Step 6: Delete the user after generating the recommendation
         await db.none("DELETE FROM users WHERE id = $1", [userId]);
 
-        res.json({ recommendations: aiResponse, message: "User deleted after recommendation" });
+        res.json({ 
+            recommendations: userFriendlyAIResponse,
+            locationData, //parsed location value ready to be used for the Image Search API
+            message: "User deleted after recommendation" 
+        });
   
       } catch (error) {
           console.error("❌ Error generating recommendations:", error);
