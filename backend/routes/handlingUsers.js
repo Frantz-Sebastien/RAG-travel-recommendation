@@ -13,12 +13,12 @@ router.use(express.json()); // ✅ Ensure body parsing
 function userFriendlyAIResponseAndLocationSeparator(responseTextFromAI){
     const locationRegex = /LOCATION:\s*(.+)/i; //I'm not familiar with using Regex, but it is helpful to locate specific and case sensitive characters
     const match = responseTextFromAI.match(locationRegex)
-    console.log(match) //for Debugging
+    // console.log(match) //for Debugging
 
     const locationData = match ? match[1].trim() : null;
     console.log(locationData) //for Debugging
     const userFriendlyAIResponse = responseTextFromAI.replace(locationRegex, '').trim() 
-    console.log(userFriendlyAIResponse) //for Debugging
+    // console.log(userFriendlyAIResponse) //for Debugging
 
     return { userFriendlyAIResponse, locationData }
 
