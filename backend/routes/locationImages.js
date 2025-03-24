@@ -44,10 +44,28 @@ router.get('/location-images', async (req, res) => {
     // Each item typically has a "link" field that contains the image URL.
     const randomImageUrls = items.map(item => item.link);
 
-    //Removing duplicate Image URLs with Set!
-    const uniqueUrls = [...new Set(randomImageUrls)]
+    const extractFileName = (url) => {
+        try {
+          const cleanUrl = new URL(url);
+          return cleanUrl.pathname.split('/').pop(); // get the last part after the last slash
+        } catch {
+          return url; // fallback
+        }
+      };
+      
+      const seenFileNames = new Set();
+      const uniqueUrls = [];
+      
+      for (const url of randomImageUrls) {
+        const fileName = extractFileName(url);
+      
+        if (!seenFileNames.has(fileName)) {
+          seenFileNames.add(fileName);
+          uniqueUrls.push(url);
+        }
+      }
 
-    const imageUrls = uniqueUrls.slice(0, 6) //Limit to 3 unique images
+    const imageUrls = uniqueUrls.slice(0, 6) //Limit to 6 unique images
 
     // Return the array of image URLs to the frontend
     return res.json({ images: imageUrls });

@@ -16,6 +16,7 @@ const Recommendations = ({ userId, text }) => {
     const [locationData, setLocationData] = useState("")
     const [imageUrls, setImagesUrls] = useState([])
     const [loadingImages, setLoadingImages] = useState(false)
+    const [selectedImage, setSelectedImage] = useState(null)
 
     useEffect(() => {
         if (!userId) {
@@ -115,15 +116,71 @@ const Recommendations = ({ userId, text }) => {
                                                     key={idx}
                                                     src={url}
                                                     alt={`location preview of ${locationData} ${idx + 1}`}
-                                                    style={{ width: "300px", height: "200px", borderRadius: "8px", objectFit: "cover"}}             
+                                                    onClick={() => setSelectedImage(url)}
+                                                    style={{ width: "300px", height: "200px", borderRadius: "8px", objectFit: "cover", cursor: "pointer", transition: "transform 0.2s"}}             
                                                 />
                                             ))}
                                         </div> 
                                     </div>
                                 )}
                             </div>
+
                         </div>
                     </div>
+                </div>
+                <div>
+                    {selectedImage && (
+                        <div
+                            className="modal-overlay"
+                            onClick={() => setSelectedImage(null)}
+                            style={{
+                                position: "fixed",
+                                top: 0,
+                                left: 0,
+                                width: "100vw",
+                                height: "100vh",
+                                backgroundColor: "rgba (0, 0, 0, 0.7)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                zIndex: 9999
+                            }}
+                        >
+                        <div
+                            style={{
+                                background: "#fff",
+                                padding: "10px",
+                                borderRadius: "8px",
+                                maxWidth: "90%",
+                                maxHeight: "80%",
+                                boxShadow: "0 0 10px rgba(0,0,0,0.5"
+                            }}
+                            onClick={(event) => event.stopPropagation()}
+                        >
+                        <img
+                            src={selectedImage} 
+                            alt="expanded view"
+                            style={{
+                                maxWidth: "100%",
+                                maxHeight: "70vh",
+                                borderRadius: "6px",
+                                objectFit: "contain"
+                            }}
+                        />
+                        <div className="text-center mt-2">
+                            <button
+                                onClick={() => setSelectedImage(null)}
+                                className="btn btn-sm btn-secondary"
+                            >
+                                close
+                            </button>
+
+                        </div>
+
+                        </div>
+
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
