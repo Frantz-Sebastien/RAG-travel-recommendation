@@ -13,7 +13,6 @@ router.use(express.json()); // ✅ Ensure body parsing
  * Generates embeddings using Gemini API
  * @param {string} text - Input text to convert into embeddings
  * @returns {Promise<Array>} - Embedding vector
- * However... I don't know how I will make this work for my website yet... but I'm leaving it because it can be a great feature, I just need to know how to implement it for the frontend.
  */
 export async function generateEmbedding(text) {
     try {
