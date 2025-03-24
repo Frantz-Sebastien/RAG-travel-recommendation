@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
+import { Carousel } from "react-responsive-carousel";
 
 const API_URL =
     import.meta.env.MODE === "development" 
@@ -107,14 +108,14 @@ const Recommendations = ({ userId, text }) => {
                                 {loadingImages && <p>Loading images...</p>}
                                 {imageUrls.length > 0 && (
                                     <div className="mt-4">
-                                        <h5>Location Images for {locationData}</h5>
-                                        <div className="d-flex flex-wrap gap-3">
+                                        <h5>Explore the Beauty of {locationData}</h5>
+                                        <div className="d-flex flex-wrap justify-content-center gap-3">
                                             {imageUrls.map((url, idx) => (
                                                 <img
                                                     key={idx}
                                                     src={url}
-                                                    alt="location preview"
-                                                    style={{ width: "300px", height: "auto", borderRadius: "8px"}}             
+                                                    alt={`location preview of ${locationData} ${idx + 1}`}
+                                                    style={{ width: "300px", height: "200px", borderRadius: "8px", objectFit: "cover"}}             
                                                 />
                                             ))}
                                         </div> 
