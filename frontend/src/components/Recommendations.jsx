@@ -128,6 +128,7 @@ const Recommendations = ({ userId, text }) => {
                         </div>
                     </div>
                 </div>
+                {/* Working on the Modal down here */}
                 <div>
                     {selectedImage && (
                         <div

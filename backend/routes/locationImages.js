@@ -44,6 +44,7 @@ router.get('/location-images', async (req, res) => {
     // Each item typically has a "link" field that contains the image URL.
     const randomImageUrls = items.map(item => item.link);
 
+    //This function is fixing the duplicate issue.
     const extractFileName = (url) => {
         try {
           const cleanUrl = new URL(url);
