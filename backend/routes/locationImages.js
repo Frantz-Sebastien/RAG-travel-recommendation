@@ -25,7 +25,7 @@ router.get('/location-images', async (req, res) => {
       cx: CSE_ID,                 // Search Engine ID
       q: locationName,            // The search query
       searchType: 'image',        // Tells Google to return images only
-      num: 6,                     // Limit how many image results
+      num: 10,                     // Limit how many image results
       safe: "active",             // Keep the image family-friendly
       imgType: "photo"            // Filter out memes, clipart, logos and stuff...
       // Optional: imgSize, fileType, etc. I do not know how to do that part properly yet
@@ -47,7 +47,7 @@ router.get('/location-images', async (req, res) => {
     //Removing duplicate Image URLs with Set!
     const uniqueUrls = [...new Set(randomImageUrls)]
 
-    const imageUrls = uniqueUrls.slice(0, 3) //Limit to 3 unique images
+    const imageUrls = uniqueUrls.slice(0, 6) //Limit to 3 unique images
 
     // Return the array of image URLs to the frontend
     return res.json({ images: imageUrls });
