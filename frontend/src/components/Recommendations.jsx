@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
-import { Carousel } from "react-responsive-carousel";
 
 const API_URL =
     import.meta.env.MODE === "development" 
