@@ -59,7 +59,7 @@ const Profile = () => {
             </div>
 
                 <div className="profile-content" style={{position: "relative", zIndex: 1}}>
-                    <h1 className="display-4 text-black text-center" >Personalized Travel Recommender</h1>
+                    <h1 className="display-4 text-black text-center" > &nbsp; </h1>
                     <UserProfileForm setUserId={setUserId} onEmbeddingGenerated={handleUserCreated} setText={setText}/>
                     {userId && embeddingGenerated ?  <Recommendations userId={userId} text={text} /> : <p className="text-center mt-2">Recommendation will appear down here</p>} 
                 </div>

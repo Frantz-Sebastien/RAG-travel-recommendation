@@ -73,7 +73,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
     } 
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">  {/* container py-4 */}
+    <div className="container d-flex justify-content-center align-items-start min-vh-100 pt-1">  {/* container py-4 */}
     <div className="row justify-content-center w-100"> {/* row justify-content-center */}
         <div className="col-md-8 col-lg-6"> {/* col-md-8 */}
             <div className="card shadow-lg">  {/* card shadow */}

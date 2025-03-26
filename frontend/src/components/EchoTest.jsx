@@ -24,8 +24,8 @@ const EchoTest = () => {
     };
 
     return (
-        <div>
-            <h2>Echo Test</h2>
+        <div className="mt-5 pt-5">
+            <h2 mt-5>Echo Test</h2>
             <form onSubmit={handleSubmit}>
                 <input 
                     type="text" 
