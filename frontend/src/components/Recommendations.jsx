@@ -16,7 +16,9 @@ const Recommendations = ({ userId, text }) => {
     const [locationData, setLocationData] = useState("")
     const [imageUrls, setImagesUrls] = useState([])
     const [loadingImages, setLoadingImages] = useState(false)
-    const [selectedImage, setSelectedImage] = useState(null)
+    const [selectedImageIndex, setSelectedImageIndex] = useState(null)
+
+    const selectedImage = selectedImageIndex !== null ? imageUrls[selectedImageIndex] : null
 
     useEffect(() => {
         if (!userId) {
@@ -73,6 +75,27 @@ const Recommendations = ({ userId, text }) => {
         }
     }, [locationData])
 
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (selectedImageIndex === null){return}
+
+            if (event.key === "ArrowLeft" && selectedImageIndex > 0){
+                setSelectedImageIndex((prev) => prev - 1) 
+            }
+
+            if (event.key === "ArrowRight" && selectedImageIndex < imageUrls.length - 1){
+                setSelectedImageIndex((prev) => prev + 1)
+            }
+
+            if (event.key === "Escape"){
+                setSelectedImageIndex(null)
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown)
+        return () => window.removeEventListener("keydown", handleKeyDown)
+    },[selectedImageIndex, imageUrls.length])
+
     return (
         <div className="container mt-4">
             <div className="row justify-content-center">
@@ -116,7 +139,7 @@ const Recommendations = ({ userId, text }) => {
                                                     key={idx}
                                                     src={url}
                                                     alt={`location preview of ${locationData} ${idx + 1}`}
-                                                    onClick={() => setSelectedImage(url)}
+                                                    onClick={() => setSelectedImageIndex(idx)}
                                                     style={{ width: "300px", height: "200px", borderRadius: "8px", objectFit: "cover", cursor: "pointer", transition: "transform 0.2s"}}             
                                                 />
                                             ))}
@@ -130,10 +153,10 @@ const Recommendations = ({ userId, text }) => {
                 </div>
                 {/* Working on the Modal down here */}
                 <div>
-                    {selectedImage && (
+                    {selectedImage !== null && (
                         <div
                             className="modal-overlay"
-                            onClick={() => setSelectedImage(null)}
+                            onClick={() => setSelectedImageIndex(null)}
                             style={{
                                 position: "fixed",
                                 top: 0,
@@ -170,7 +193,7 @@ const Recommendations = ({ userId, text }) => {
                         />
                         <div className="text-center mt-2">
                             <button
-                                onClick={() => setSelectedImage(null)}
+                                onClick={() => setSelectedImageIndex(null)}
                                 className="btn btn-sm btn-secondary"
                             >
                                 close
