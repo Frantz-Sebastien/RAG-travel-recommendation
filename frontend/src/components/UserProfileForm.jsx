@@ -160,7 +160,7 @@ const UserProfileForm = ({ setUserId, onEmbeddingGenerated, setText }) => {
 
                         <div className="mb-3">  {/* */}
                             <label className="form-label">Preferred Activities</label>  {/* */}
-                            <div className="d-flex gap-3">  {/* */}
+                            <div className="d-flex flex-wrap gap-3">  {/* */}
                                 {["Sunbathing", "Hiking", "Swimming", "Skiing"].map((activity) => {
                                     const lowerCaseActivity = activity.toLowerCase();
                                     return (
