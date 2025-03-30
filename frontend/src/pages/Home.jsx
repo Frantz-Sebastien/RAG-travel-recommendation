@@ -8,7 +8,7 @@ const Home = () => {
           <BackgroundSlider />
         <div className="d-flex flex-column align-items-center justify-content-center vh-100">
           
-          <a href="/testing">Testing FrontEnd-BackEnd connection</a>
+          {/* <a href="/testing">Testing FrontEnd-BackEnd connection</a> */}
 
           {/* ✅ Use a real button inside the Link */}
           <Link to="/profile" className="button-wrapper">
