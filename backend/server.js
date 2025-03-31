@@ -96,6 +96,7 @@ app.get("/api/health", (req, res) => {
 
 //Route to online backend awake
 app.get('/wakeup', (req, res) => {
+    console.log("Waking up. I'm awake!")
     res.status(200).send('OK');
   });
 
